@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RUPizzeria</string>
+    <string name="photo_for_splashing_screen">Photo for splashing screen</string>
+    <string name="splashing_screen_string">Let\'s crust !</string>
 </resources>
