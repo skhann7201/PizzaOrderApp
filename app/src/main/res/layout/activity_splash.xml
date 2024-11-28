@@ -5,36 +5,42 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#B52A04"
+    android:background="#B42323"
     tools:context=".SplashActivity">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="345dp"
-        android:layout_height="444dp"
-        android:contentDescription= "@string/photo_for_splashing_screen"
+    <LinearLayout
+        android:layout_width="282dp"
+        android:layout_height="355dp"
+        android:background="@drawable/rounded_frame"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.435"
-        app:srcCompat="@drawable/pizzeria_splash" />
+        app:layout_constraintVertical_bias="0.474">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_black_italic"
-        android:shadowColor="#77FFC107"
-        android:shadowDx="-10"
-        android:shadowDy="-10"
-        android:shadowRadius="2"
-        android:text="@string/splashing_screen_string"
-        android:textColor="#F0EDED"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3"
-        app:layout_constraintVertical_bias="0.0" />
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="248dp"
+            android:layout_height="266dp"
+            android:contentDescription="@string/photo_for_splashing_screen"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/pizzeria_splash" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_black_italic"
+            android:shadowColor="#000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="0"
+            android:text="@string/splashing_screen_string"
+            android:textColor="#1A0202"
+            android:textSize="34sp" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
