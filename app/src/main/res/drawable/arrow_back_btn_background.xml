@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#dedede"> <!-- Ripple color -->
+    <item>
+        <layer-list>
+            <!-- Shadow -->
+            <item>
+                <shape>
+                    <solid android:color="#e0d5c6" /> <!-- Beige shadow color -->
+                    <corners android:radius="8dp" />
+                </shape>
+            </item>
+
+            <!-- Button Background -->
+            <item android:top="2dp" android:left="2dp" android:right="2dp" android:bottom="2dp">
+                <shape>
+                    <solid android:color="#fff7e6" /> <!-- Beige background -->
+                    <corners android:radius="8dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</ripple>
