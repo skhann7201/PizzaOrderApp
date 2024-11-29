@@ -9,32 +9,54 @@
 
 
 
-    <!-- Small Back Button -->
-    <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="39dp"
-        android:layout_height="35dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/arrow_back_btn_background"
-        android:contentDescription="Back Button"
-        android:scaleType="center"
-        android:src="@drawable/arrow_back"
+    <!-- Header with Back Button and Text -->
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Small Back Button -->
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/arrow_back_btn_background"
+            android:contentDescription="Back Button"
+            android:scaleType="center"
+            android:src="@drawable/arrow_back" />
+
+        <!-- Title TextView -->
+        <TextView
+            android:id="@+id/tv_headerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Chicago Style Pizza"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <!-- ViewPager2 for Pizza Images -->
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPagerPizza"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        app:layout_constraintTop_toBottomOf="@id/btn_back"
+        android:id="@+id/vp_pizzaImage"
+        android:layout_width="413dp"
+        android:layout_height="284dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/viewPagerPizza"
+        app:layout_constraintTop_toBottomOf="@id/vp_pizzaImage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -48,7 +70,7 @@
             <!-- Size Selection -->
 
             <TextView
-                android:id="@+id/textViewSize"
+                android:id="@+id/tx_selectSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -64,28 +86,28 @@
                 android:layout_marginBottom="16dp">
 
                 <RadioButton
-                    android:id="@+id/radioButtonSmall"
+                    android:id="@+id/rb_small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:text="Small" />
 
                 <RadioButton
-                    android:id="@+id/radioButtonMedium"
+                    android:id="@+id/rb_medium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:text="Medium " />
 
                 <RadioButton
-                    android:id="@+id/radioButtonLarge"
+                    android:id="@+id/rb_large"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
                     android:text="Large " />
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/tx_selectToppings"
                     android:layout_width="match_parent"
                     android:layout_height="34dp"
                     android:fontFamily="@font/poppins"
@@ -94,7 +116,7 @@
 
             <!-- Toppings Selection -->
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroupToppings"
+                android:id="@+id/cg_toppings"
                 android:layout_width="match_parent"
                 android:layout_height="236dp"
                 android:padding="16dp"
@@ -108,7 +130,7 @@
                 android:gravity="center">
 
                 <TextView
-                    android:id="@+id/textViewPrice"
+                    android:id="@+id/tv_price"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
                     android:layout_weight="1"
@@ -119,7 +141,7 @@
                     android:textStyle="bold" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/buttonAddToCart"
+                    android:id="@+id/btn_addToCart"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -136,4 +158,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
