@@ -1,27 +1,37 @@
-<LinearLayout
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cv_pizzaImages"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    app:cardCornerRadius="5dp"
+    app:cardElevation="8dp"
+    android:layout_margin="10dp">
 
-    <ImageView
-        android:id="@+id/imgv_pizzaImages"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scaleType="centerCrop"
-        android:contentDescription="Pizza Image" />
-
-    <TextView
-        android:id="@+id/tv_pizzaName"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/poppins_semibold"
+        android:orientation="vertical"
         android:gravity="center"
-        android:text="Pizza Name"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-</LinearLayout>
+        android:padding="5dp">
+
+        <ImageView
+            android:id="@+id/imgv_pizzaImages"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="Pizza Image"
+            android:scaleType="center" />
+
+        <TextView
+            android:id="@+id/tv_pizzaName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:gravity="center"
+            android:text="Pizza Name"
+            android:textColor="@android:color/black"
+            android:textSize="16sp" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

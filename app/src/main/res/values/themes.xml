@@ -2,7 +2,10 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.RUPizzeria" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/primary_red</item>
+        <item name="android:statusBarColor">@color/primary_red</item>
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
     </style>
 
     <style name="Theme.RUPizzeria" parent="Base.Theme.RUPizzeria" />
