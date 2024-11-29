@@ -54,13 +54,14 @@
                 android:textSize="34sp" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/chicagoPizzaCard"
+                android:id="@+id/cardview_chicagoPizza"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="16dp"
                 app:cardBackgroundColor="#EFE3C8"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="8dp">
+                app:cardElevation="8dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -101,13 +102,14 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/NYPizzaCard"
+                android:id="@+id/cardview_NYPizza"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_margin="16dp"
                 app:cardBackgroundColor="#EFE3C8"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="8dp">
+                app:cardElevation="8dp"
+                android:foreground="?attr/selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
