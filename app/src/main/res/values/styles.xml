@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Active Text Appearance for Bottom Navigation -->
+    <style name="TextAppearance.BottomNavigation.Active" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/white</item> <!-- Active text color -->
+    </style>
+
+    <!-- Inactive Text Appearance for Bottom Navigation -->
+    <style name="TextAppearance.BottomNavigation.Inactive" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/white</item> <!-- Inactive text color -->
+    </style>
+</resources>
