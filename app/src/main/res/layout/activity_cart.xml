@@ -7,6 +7,61 @@
     tools:context=".CartActivity">
 
     <!-- Header with Back Button and Text -->
+
+    <LinearLayout
+        android:id="@+id/price_and_add_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_red"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_placeOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Place Order"
+            android:textAllCaps="false"
+            android:textColor="#050505"
+            android:textSize="16sp"
+            app:backgroundTint="#f7d012"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/price_and_add_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Size Selection -->
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/vp_cartView"
+                android:layout_width="382dp"
+                android:layout_height="400dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Toppings Selection -->
+
+        </LinearLayout>
+    </ScrollView>
+
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -41,4 +96,5 @@
             android:textSize="18sp"
             android:textStyle="bold" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

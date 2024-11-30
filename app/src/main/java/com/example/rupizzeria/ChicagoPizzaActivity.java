@@ -2,13 +2,11 @@ package com.example.rupizzeria;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +48,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chicago_pizza);
 
         // Initialize UI elements
-        vp_pizza = findViewById(R.id.vp_pizzaImage);
+        vp_pizza = findViewById(R.id.vp_cartView);
         tv_price = findViewById(R.id.tv_price);
         cg_toppings = findViewById(R.id.cg_toppings);
 
@@ -67,7 +65,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> navigateBackToHome());
 
         // Set up Add to Cart Button
-        findViewById(R.id.btn_addToCart).setOnClickListener(v -> addToCart());
+        findViewById(R.id.btn_placeOrder).setOnClickListener(v -> addToCart());
 
     } // end onCreate
 

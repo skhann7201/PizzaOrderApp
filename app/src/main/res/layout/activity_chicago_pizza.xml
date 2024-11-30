@@ -61,7 +61,7 @@
             android:padding="16dp">
 
             <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vp_pizzaImage"
+                android:id="@+id/vp_cartView"
                 android:layout_width="382dp"
                 android:layout_height="201dp"
                 android:layout_marginBottom="16dp" />
@@ -150,7 +150,7 @@
             android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_addToCart"
+            android:id="@+id/btn_placeOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
