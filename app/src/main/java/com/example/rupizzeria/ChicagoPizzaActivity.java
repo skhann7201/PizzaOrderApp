@@ -471,7 +471,8 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         }
 
         // Add the current pizza to the cart
-        cartItems.add(selectedPizza);
+        ShareResource sharedResource = ShareResource.getInstance();
+        sharedResource.addPizzaToCart(selectedPizza, "Chicago Style");
 
         // Show confirmation
         Toast.makeText(this, selectedPizza.getName() + " added to cart.", Toast.LENGTH_SHORT).show();

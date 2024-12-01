@@ -1,100 +1,137 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CartActivity">
 
-    <!-- Header with Back Button and Text -->
-
-    <LinearLayout
-        android:id="@+id/price_and_add_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary_red"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_placeOrder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="Place Order"
-            android:textAllCaps="false"
-            android:textColor="#050505"
-            android:textSize="16sp"
-            app:backgroundTint="#f7d012"
-            app:cornerRadius="10dp" />
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/price_and_add_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <!-- Size Selection -->
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/vp_cartView"
-                android:layout_width="382dp"
-                android:layout_height="400dp"
-                android:layout_marginBottom="16dp" />
-
-            <!-- Toppings Selection -->
-
-        </LinearLayout>
-    </ScrollView>
-
+    <!-- Header Section -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:padding="16dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
-
-        <!-- Small Back Button -->
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/arrow_back_btn_background"
-            android:contentDescription="Back Button"
-            android:scaleType="center"
-            android:src="@drawable/arrow_back" />
-
-        <!-- Title TextView -->
-        <TextView
-            android:id="@+id/tv_headerTitle"
-            android:layout_width="wrap_content"
+        <!-- Back Button and Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
-            android:text="Your Cart"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Back Button -->
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/arrow_back_btn_background"
+                android:contentDescription="Back Button"
+                android:scaleType="center"
+                android:src="@drawable/arrow_back" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/tv_headerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="Your Cart"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Order Info -->
+        <TextView
+            android:id="@+id/tv_order_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="Order ID: 12345"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textSize="14sp"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/tv_total_items"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:text="Total Items: 3"
+            android:textColor="@android:color/black"
+            android:textSize="14sp" />
     </LinearLayout>
 
+    <!-- Item List Section -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_cart_items"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@id/header"
+        app:layout_constraintBottom_toTopOf="@id/summary_and_place_order"
+        tools:listitem="@layout/cardview_cart_item" />
+
+    <!-- Summary and Place Order Section -->
+    <LinearLayout
+        android:id="@+id/summary_and_place_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_red"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Summary Section -->
+        <TextView
+            android:id="@+id/tv_subtotal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Subtotal: $0.00"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_tax"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sales Tax: $0.00"
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Total: $0.00"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:paddingBottom="8dp" />
+
+        <!-- Place Order Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_placeOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Place Order"
+            android:textAllCaps="false"
+            android:textColor="@color/primary_red"
+            android:textSize="16sp"
+            app:backgroundTint="@color/white"
+            app:cornerRadius="10dp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

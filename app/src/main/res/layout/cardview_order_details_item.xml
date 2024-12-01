@@ -1,0 +1,80 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Pizza Image -->
+        <ImageView
+            android:id="@+id/img_pizza"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/chicago_style_bt" />
+
+        <!-- Pizza Details -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Pizza Name -->
+            <TextView
+                android:id="@+id/tv_pizza_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chicago Style Pizza"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <!-- Pizza Type -->
+            <TextView
+                android:id="@+id/tv_pizza_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type: Deluxe"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <!-- Pizza Size -->
+            <TextView
+                android:id="@+id/tv_pizza_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Size: Medium"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <!-- Price -->
+            <TextView
+                android:id="@+id/tv_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price: $12.99"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <!-- Toppings -->
+            <TextView
+                android:id="@+id/tv_toppings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Toppings: Mushrooms, Pepperoni, Onions"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="2" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
