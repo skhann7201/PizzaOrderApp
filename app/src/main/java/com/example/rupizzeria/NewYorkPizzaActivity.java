@@ -26,6 +26,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This class manages New York Activity, the user interface for selecting different types of pizzas,
+ * sizes, and toppings in the Chicago-style pizza menu. This activity utilizes a ViewPager2
+ * for displaying pizzas, a ChipGroup for selecting toppings, and RadioButtons for choosing pizza sizes.
+ * @author Shahnaz Khan, Vy Nguyen
+ */
 public class NewYorkPizzaActivity extends AppCompatActivity {
 
     private ViewPager2 vp_pizza; //to scroll in the images
@@ -461,16 +467,14 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
     private void addToCart(){
         Pizza selectedPizza = pizzaList.get(currentPosition);
 
-        // Check if the size is set
         if (selectedPizza.getSize() == null) {
             Toast.makeText(this, "Please select a size before adding to the cart.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Add the current pizza to the cart
-        cartItems.add(selectedPizza);
+        ShareResource sharedResource = ShareResource.getInstance();
+        sharedResource.addPizzaToCart(selectedPizza, "New York Style");
 
-        // Show confirmation
         Toast.makeText(this, selectedPizza.getName() + " added to cart.", Toast.LENGTH_SHORT).show();
 
         // Optional: Reset selections after adding to the cart

@@ -146,7 +146,6 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
 
     /**
      * Binds a pizza's data (image and name) to the ViewHolder.
-     *
      * @param holder The PizzaViewHolder to bind data to.
      * @param position The position of the pizza in the list.
      */

@@ -27,7 +27,7 @@ public class ShareResource {
         cartItems = new ArrayList<>();
         ordersList = new ArrayList<>();
         pizzaStyles = new HashMap<>();
-        orderNumberCounter = 1; //order number start at 1
+        orderNumberCounter = 1;
         currentOrder = new Order(orderNumberCounter);
     }
 
