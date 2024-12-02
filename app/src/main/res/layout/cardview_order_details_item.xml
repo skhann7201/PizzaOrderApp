@@ -75,6 +75,18 @@
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:maxLines="2" />
+
         </LinearLayout>
+
+        <!-- Remove Button -->
+        <ImageButton
+            android:id="@+id/btn_remove"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Remove Pizza"
+            android:src="@android:drawable/btn_dialog" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
