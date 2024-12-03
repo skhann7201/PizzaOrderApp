@@ -4,17 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * CartActivity manages the shopping cart screen. It displays a list of pizzas in the cart with their details (style, size, toppings, price).
@@ -106,12 +100,23 @@ public class CartActivity extends AppCompatActivity {
      * Place the order (e.g., move it to the orders list, clear cart).
      */
     private void placeOrder() {
-        shareResource.addOrder(shareResource.getCurrentOrder());
+
+        // check if the cart is empty
+        if (shareResource.getCartItems().isEmpty()) {
+            Toast.makeText(this, "Cart is empty. Add items to place an order.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Order currentOrder = shareResource.getCurrentOrder();
+        shareResource.addOrder(currentOrder);
+
 
         shareResource.startNewOrder();
 
         updateOrderDetails();
 
+
+        //show order activity
         Intent intent = new Intent(this, OrderActivity.class);
         startActivity(intent);
         finish();

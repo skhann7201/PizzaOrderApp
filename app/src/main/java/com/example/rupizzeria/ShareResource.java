@@ -1,5 +1,7 @@
 package com.example.rupizzeria;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.Map;
  * @author Vy Nguyen
  */
 public class ShareResource {
-    private static ShareResource instance;
+    private static ShareResource instance; // reference the main home controller
 
     //Shared data
     private List<Pizza> cartItems;
@@ -58,6 +60,7 @@ public class ShareResource {
      * @param style The style of the pizza (e.g., Chicago, NY).
      */
     public void addPizzaToCart(Pizza pizza, String style) {
+        currentOrder.addPizza(pizza);
         cartItems.add(pizza);
         pizzaStyles.put(pizza, style);
     }
@@ -67,8 +70,8 @@ public class ShareResource {
      * @param pizza The Pizza object to remove.
      */
     public void removePizzaFromCart(Pizza pizza) {
+        currentOrder.removePizza(pizza);
         cartItems.remove(pizza);
-        pizzaStyles.remove(pizza);
     }
 
     /**
@@ -119,4 +122,20 @@ public class ShareResource {
     public String getPizzaStyle(Pizza pizza) {
         return pizzaStyles.getOrDefault(pizza, "Unknown Style");
     }
+
+    /**
+     * Formats a topping string.
+     * Capitalizes the first letter of each topping, except for specific cases like "BBQ Chicken."
+     *
+     * @param topping The topping string to format.
+     * @return The formatted topping string.
+     */
+    public static String formatTopping(String topping) {
+        if (topping.equalsIgnoreCase("bbq chicken")) {
+            return "BBQ Chicken";
+        }
+        // Capitalize the first letter and make the rest lowercase
+        return topping.substring(0, 1).toUpperCase() + topping.substring(1).toLowerCase();
+    }
+
 }

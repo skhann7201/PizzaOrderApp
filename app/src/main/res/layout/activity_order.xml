@@ -40,7 +40,7 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- RecyclerView for Scrollable Orders -->
+    <!-- RecyclerView for Orders -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_orders"
         android:layout_width="0dp"
@@ -50,4 +50,83 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <!-- Order Details Popup Section -->
+    <LinearLayout
+        android:id="@+id/order_details_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:padding="16dp">
+
+        <!-- Close Button -->
+        <ImageButton
+            android:id="@+id/btn_close_details"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Close Details"
+            app:srcCompat="@drawable/ic_close"
+            android:padding="4dp"
+            app:tint="@color/primary_red" />
+
+        <!-- Order Details -->
+        <TextView
+            android:id="@+id/tv_order_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order ID: #"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_order_items"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <!-- Total Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:id="@+id/tv_subtotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subtotal: $0.00"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tv_tax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tax: $0.00"
+                android:paddingBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tv_total"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total: $0.00" />
+        </LinearLayout>
+
+        <!-- Cancel Order Button -->
+        <Button
+            android:id="@+id/btn_cancel_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cancel Order"
+            android:backgroundTint="@color/primary_red"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

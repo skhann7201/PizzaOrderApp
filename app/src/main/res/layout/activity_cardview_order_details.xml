@@ -31,7 +31,7 @@
 
             <!-- Pizza Name -->
             <TextView
-                android:id="@+id/tv_pizza_name"
+                android:id="@+id/tv_pizza_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chicago Style Pizza"
@@ -58,7 +58,7 @@
 
             <!-- Price -->
             <TextView
-                android:id="@+id/tv_price"
+                android:id="@+id/tv_pizza_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Price: $12.99"
@@ -67,26 +67,16 @@
 
             <!-- Toppings -->
             <TextView
-                android:id="@+id/tv_toppings"
+                android:id="@+id/tv_pizza_toppings"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Toppings: Mushrooms, Pepperoni, Onions"
+
                 android:textSize="14sp"
                 android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:maxLines="2" />
 
         </LinearLayout>
-
-        <!-- Remove Button -->
-        <ImageButton
-            android:id="@+id/btn_remove"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="Remove Pizza"
-            android:src="@android:drawable/btn_dialog" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

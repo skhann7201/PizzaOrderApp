@@ -49,7 +49,7 @@ public class Order {
      * Calculates the total amount of all pizzas in the order before tax.
      * @return The total amount before tax;
      */
-    public double getTotalAmountBeforeTax() {
+    public double getSubtotal() {
         double total = 0;
         for(Pizza pizza: pizzas) {
             total += pizza.price();
@@ -62,7 +62,7 @@ public class Order {
      * @return The sales tax amount of the order.
      */
     public double getSalesTax() {
-        return getTotalAmountBeforeTax() * Pizza.getNJSaleTax();
+        return getSubtotal() * Pizza.getNJSaleTax();
     }
 
     /**
@@ -70,7 +70,7 @@ public class Order {
      * @return The total amount with tax.
      */
     public double getTotalPrice() {
-        return getTotalAmountBeforeTax() + getSalesTax();
+        return getSubtotal() + getSalesTax();
     }
 
     /**
@@ -109,7 +109,7 @@ public class Order {
         for(Pizza pizza: pizzas) {
             orderDetails.append(pizza.toString()).append("\n");
         }
-        orderDetails.append("Total before tax: $").append(String.format("%.2f", getTotalAmountBeforeTax())).append("\n");
+        orderDetails.append("Total before tax: $").append(String.format("%.2f", getSubtotal())).append("\n");
         orderDetails.append("Sales tax: $").append(String.format("%.2f", getSalesTax())).append("\n");
         orderDetails.append("Total after tax: $").append(String.format("%.2f", getTotalPrice())).append("\n");
 
