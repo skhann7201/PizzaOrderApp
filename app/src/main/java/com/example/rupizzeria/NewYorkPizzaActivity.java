@@ -272,10 +272,10 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
      * @return The image resource ID.
      */
     private int getPizzaImageResource(Pizza pizza) {
-        if (pizza instanceof Deluxe) return R.drawable.chicago_deluxe;
-        if (pizza instanceof Meatzza) return R.drawable.chicago_meatzza;
-        if (pizza instanceof BBQChicken) return R.drawable.chicago_bbqchicken;
-        if (pizza instanceof BuildYourOwn) return R.drawable.chicago_byo;
+        if (pizza instanceof Deluxe) return R.drawable.ny_deluxe;
+        if (pizza instanceof Meatzza) return R.drawable.ny_meatzza;
+        if (pizza instanceof BBQChicken) return R.drawable.ny_bbqchicken;
+        if (pizza instanceof BuildYourOwn) return R.drawable.ny_byo;
         return R.drawable.chicago_style_bt; // Fallback image
     }
 
