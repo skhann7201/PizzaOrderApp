@@ -104,7 +104,10 @@ public class OrderActivity extends AppCompatActivity {
 
         // Set up items RecyclerView
         rvOrderItems.setLayoutManager(new LinearLayoutManager(this));
-        rvOrderItems.setAdapter(new OrderItemDetailsAdapter(order.getPizzaList()));
+        OrderItemDetailsAdapter adapter = new OrderItemDetailsAdapter(order.getPizzaList());
+        rvOrderItems.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
 
         // Handle cancel order button
         btnCancelOrder.setOnClickListener(v -> {

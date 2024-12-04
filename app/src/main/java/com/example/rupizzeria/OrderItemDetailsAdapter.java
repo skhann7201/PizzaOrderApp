@@ -24,7 +24,7 @@ public class OrderItemDetailsAdapter extends RecyclerView.Adapter<OrderItemDetai
     @Override
     public PizzaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_cardview_order_details, parent, false);
+                .inflate(R.layout.order_item_details, parent, false);
         return new PizzaViewHolder(view);
     }
 
