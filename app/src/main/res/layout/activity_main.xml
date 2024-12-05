@@ -34,37 +34,41 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/imageView2"
+                    android:id="@+id/imgv_logo"
                     android:layout_width="127dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:scaleType="centerInside"
-                    app:srcCompat="@drawable/pizzeria_logo" />
+                    app:srcCompat="@drawable/pizzeria_logo"
+                    android:contentDescription="@null"/>
             </FrameLayout>
 
             <View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="3dp"
                 android:background="?android:attr/listDivider" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tv_main_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="1dp"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center"
-                android:text="Menu"
+                android:text="@string/main_menu_header"
                 android:textColor="#000000"
-                android:textSize="34sp" />
+                android:textSize="34sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="TextSizeCheck" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardview_chicagoPizza"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="12dp"
+                android:layout_margin="10dp"
                 app:cardBackgroundColor="@color/primary_beige"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="8dp">
@@ -77,13 +81,13 @@
 
                     <!-- Title Section -->
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/tv_chicago_header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/poppins_bold"
                         android:gravity="center"
-                        android:text="Chicago Style Pizza"
+                        android:text="@string/main_chicago_header"
                         android:textColor="@color/primary_red"
                         android:textSize="22sp" />
 
@@ -98,23 +102,25 @@
 
                         <!-- Image Section -->
                         <ImageView
-                            android:id="@+id/imageView4"
+                            android:id="@+id/imgv_chicago_pizza"
                             android:layout_width="120dp"
                             android:layout_height="120dp"
                             android:layout_marginEnd="12dp"
                             android:background="@drawable/rounded_frame"
+                            android:contentDescription="@null"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/chicago_style_bt" />
 
                         <!-- Description Section -->
                         <TextView
-                            android:id="@+id/textView6"
+                            android:id="@+id/tv_chicago_description"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:fontFamily="@font/poppins"
+                            android:maxWidth="600dp"
                             android:lineSpacingExtra="4dp"
-                            android:text="Deep-dish crust packed with rich layers of cheese, hearty toppings, and zesty tomato sauce, offering a thick, indulgent bite in every slice."
+                            android:text="@string/main_chicago_description"
                             android:textColor="@android:color/black"
                             android:textSize="14sp" />
                     </LinearLayout>
@@ -138,13 +144,13 @@
 
                     <!-- Title Section -->
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/tv_ny_header"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
                         android:fontFamily="@font/poppins_bold"
                         android:gravity="center"
-                        android:text="New York Style Pizza"
+                        android:text="@string/main_ny_header"
                         android:textColor="@color/primary_red"
                         android:textSize="22sp" />
 
@@ -158,23 +164,25 @@
 
                         <!-- Description Section -->
                         <TextView
-                            android:id="@+id/textView5"
+                            android:id="@+id/tv_ny_description"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/poppins"
                             android:lineSpacingExtra="4dp"
-                            android:text="Hand-stretched thin and cut into six big, foldable slices offering a perfect balance of sauce, cheese, and crust in every bite."
+                            android:maxWidth="600dp"
+                            android:text="@string/main_ny_description"
                             android:textColor="@android:color/black"
                             android:textSize="14sp" />
 
                         <!-- Image Section -->
                         <ImageView
-                            android:id="@+id/imageView5"
+                            android:id="@+id/imgv_ny_pizza"
                             android:layout_width="120dp"
                             android:layout_height="120dp"
                             android:background="@drawable/rounded_frame"
+                            android:contentDescription="@null"
                             android:scaleType="centerCrop"
                             app:srcCompat="@drawable/ny_style_bt" />
                     </LinearLayout>
@@ -189,6 +197,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#b42323"
+        android:visibility="visible"
         android:fitsSystemWindows="true"
         app:itemIconSize="28dp"
         app:itemIconTint="@color/white"

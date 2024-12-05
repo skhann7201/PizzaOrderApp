@@ -12,6 +12,13 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * The MainActivity class is the entry point for RU Pizzeria applications.
+ * It sets up the main layout, handles user interactions with the main menu cardview,
+ * and manages navigation through the BottomNavigationView
+ *
+ * @author Vy Nguyen, Shahnaz Khan
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Override
