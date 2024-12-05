@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -31,16 +34,16 @@ import java.util.List;
  * @author Vy Nguyen
  */
 public class ChicagoPizzaActivity extends AppCompatActivity {
-
     private ViewPager2 vp_pizza;
     private TextView tv_price;
     private ChipGroup cg_toppings;
+    private Spinner spinner_size;
 
 
     private PizzaFactory chicagoPizzaFactory = new ChicagoPizza();
     private int currentPosition = 0;
     private List<Pizza> pizzaList;
-    private List<Pizza> cartItems = new ArrayList<>(); // List to store pizzas added to the cart
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         vp_pizza = findViewById(R.id.vp_cartView);
         tv_price = findViewById(R.id.tv_price);
         cg_toppings = findViewById(R.id.cg_toppings);
+        spinner_size = findViewById(R.id.spinner_pizza_size);
 
         // Populate pizzaList
         setupPizzaList();
@@ -58,11 +62,10 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         // Set up view pager
         setupViewPager();
 
-        // Set up the size selection logic
-        setupSizeSelection();
+        setupSizeSpinner();
+
         // Initialize back button
-        ImageButton backButton = findViewById(R.id.btn_back);
-        backButton.setOnClickListener(v -> navigateBackToHome());
+       setupBackButton();
 
         // Set up Add to Cart Button
         findViewById(R.id.btn_placeOrder).setOnClickListener(v -> addToCart());
@@ -165,8 +168,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
      * Resets the size selection RadioGroup to have no selected option.
      */
     private void resetSizeSelection() {
-        RadioGroup radioGroupSize = findViewById(R.id.radioGroupPizzaSize);
-        radioGroupSize.clearCheck();
+        spinner_size.setSelection(0, true); // Reset to default prompt
     }
 
     /**
@@ -192,38 +194,44 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     /**
      * Sets up the RadioGroup for size selection and handles size change events.
      */
-    private void setupSizeSelection(){
-        // set of size selection
-        RadioGroup radioGroupSize = findViewById(R.id.radioGroupPizzaSize);
+    private void setupSizeSpinner(){
+        List<String> sizeStrings = new ArrayList<>();
+        sizeStrings.add("Select a size"); // Default
+        for (Size size : Size.values()) {
+            sizeStrings.add(size.name().substring(0, 1).toUpperCase() + size.name().substring(1).toLowerCase());
+        }
 
-        radioGroupSize.setOnCheckedChangeListener((group,checkedId) ->
-                handleSizeSelection(checkedId));
+        // Create adapter for the Spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, sizeStrings);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_size.setAdapter(adapter);
 
+        // Handle Spinner selection
+        spinner_size.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0) {
+                    return; // default text, do nothing
+                }
+                handleSizeSelection(Size.values()[position-1]); // Adjust index for actual size
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // No action needed
+            }
+        });
     }
 
     /**
      * Handles the selection of a pizza size and updates the price.
      *
-     * @param checkedId The ID of the selected RadioButton.
+     * @param selectedSize the size of the pizza.
      */
-    private void handleSizeSelection(int checkedId){
-        Size selectedSize; // Declare a variable to store the selected size.
-
-        if (checkedId == R.id.rb_small) {
-            selectedSize = Size.SMALL;
-        } else if (checkedId == R.id.rb_medium) {
-            selectedSize = Size.MEDIUM;
-        } else if (checkedId == R.id.rb_large) {
-            selectedSize = Size.LARGE;
-        } else {
-            selectedSize = null; // Default or error case, if needed.
-        }
-
-        if (selectedSize != null) {
-            Pizza selectedPizza = pizzaList.get(currentPosition);
-            selectedPizza.setSize(selectedSize); // Assuming your Pizza class has a setSize method
-            updatePrice(selectedPizza);
-        }
+    private void handleSizeSelection(Size selectedSize){
+        Pizza selectedPizza = pizzaList.get(currentPosition);
+        selectedPizza.setSize(selectedSize);
+        updatePrice(selectedPizza);
     }
     /**
      * Apply carousel effect with scaling and spacing for ViewPager2.
@@ -447,7 +455,17 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
      * @param pizza The selected pizza.
      */
     private void updatePrice(Pizza pizza) {
-        tv_price.setText("$" + String.format("%.2f", pizza.price()));
+        String formattedPrice = String.format("%.2f", pizza.price());
+        String priceText = getString(R.string.pizza_price, formattedPrice);
+        tv_price.setText(priceText);
+    }
+
+    /**
+     * Configures the back button to navigate to the main menu.
+     */
+    private void setupBackButton() {
+        ImageButton backButton = findViewById(R.id.btn_back);
+        backButton.setOnClickListener(v -> navigateBackToHome());
     }
 
     /**
@@ -460,12 +478,21 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         finish(); // End current activity
     }
 
+    private void showSizeSelectionAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle("Size Selection Required")
+                .setMessage("Please select a size before adding to the cart.")
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+
     private void addToCart(){
         Pizza selectedPizza = pizzaList.get(currentPosition);
 
         // Check if the size is set
         if (selectedPizza.getSize() == null) {
-            Toast.makeText(this, "Please select a size before adding to the cart.", Toast.LENGTH_SHORT).show();
+            showSizeSelectionAlert();
             return;
         }
 
