@@ -45,6 +45,12 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     private List<Pizza> pizzaList;
 
 
+
+    /**
+     * Called when the activity is created.
+     * This method initializes the UI components, sets up the pizza list,
+     * configures the view pager, and handles user interactions.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,21 +62,16 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         cg_toppings = findViewById(R.id.cg_toppings);
         spinner_size = findViewById(R.id.spinner_pizza_size);
 
-        // Populate pizzaList
         setupPizzaList();
 
-        // Set up view pager
         setupViewPager();
 
         setupSizeSpinner();
 
-        // Initialize back button
        setupBackButton();
 
-        // Set up Add to Cart Button
         findViewById(R.id.btn_placeOrder).setOnClickListener(v -> addToCart());
-
-    } // end onCreate
+    }
 
     /**
      * Initializes the list of pizzas available in the menu.
@@ -443,6 +444,10 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Resets all selections to their default state.
+     * This includes resetting the pizza size, price, and the topping selections.
+     */
     private void resetSelections() {
         resetSizeSelection();
         resetPrice();
@@ -451,7 +456,6 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
 
     /**
      * Updates the price display based on the selected pizza's price.
-     *
      * @param pizza The selected pizza.
      */
     private void updatePrice(Pizza pizza) {
@@ -478,6 +482,9 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         finish(); // End current activity
     }
 
+    /**
+     * This shows the alert when size is not selected and Pizza is being added to cart
+     */
     private void showSizeSelectionAlert() {
         new AlertDialog.Builder(this)
                 .setTitle("Size Selection Required")
@@ -487,6 +494,9 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Adds the selected Pizza to cart on clicking add to cart
+     */
     private void addToCart(){
         Pizza selectedPizza = pizzaList.get(currentPosition);
 

@@ -98,7 +98,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Creates the RecyclerView.Adapter for the ViewPager2 to display pizza details.
-     *
      * @return A RecyclerView.Adapter for the pizza ViewPager2.
      */
     private RecyclerView.Adapter<NewYorkPizzaActivity.PizzaViewHolder> createViewPagerAdapter() {
@@ -137,7 +136,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Resets the highlight for non-selected pizzas in the ViewPager2.
-     *
      * @param holder The PizzaViewHolder for a non-selected pizza.
      */
     private void resetPizzaHighlight(NewYorkPizzaActivity.PizzaViewHolder holder) {
@@ -147,7 +145,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Binds a pizza's data (image and name) to the ViewHolder.
-     *
      * @param holder The PizzaViewHolder to bind data to.
      * @param position The position of the pizza in the list.
      */
@@ -180,7 +177,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Handles changes in the ViewPager2's selected page.
-     *
      * @param position The position of the newly selected page.
      */
     private void handlePageChange(int position) {
@@ -206,7 +202,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Handles the selection of a pizza size and updates the price.
-     *
      * @param checkedId The ID of the selected RadioButton.
      */
     private void handleSizeSelection(int checkedId){
@@ -231,30 +226,25 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Apply carousel effect with scaling and spacing for ViewPager2.
-     *
      * @param viewPager The ViewPager2 instance.
      */
     private void applyCarouselEffect(ViewPager2 viewPager) {
-        // Enable peeking and scaling
         viewPager.setClipToPadding(false);
         viewPager.setClipChildren(false);
         viewPager.setOffscreenPageLimit(3);
 
-        // Set padding to allow peeking
         int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.viewpager_item_margin);
         viewPager.setPadding(horizontalMargin, 0, horizontalMargin, 0);
 
         RecyclerView recyclerView = (RecyclerView) viewPager.getChildAt(0);
         recyclerView.setClipToPadding(false);
 
-        // Add a PageTransformer for scaling effect
         viewPager.setPageTransformer((page, position) -> {
             float absPos = Math.abs(position);
             float scale = 0.85f + (1 - absPos) * 0.15f; // Scale pages
             page.setScaleY(scale);
         });
 
-        // Add margin between items
         int itemMarginPx = getResources().getDimensionPixelSize(R.dimen.viewpager_item_margin);
         recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
@@ -267,7 +257,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Retrieves the image resource ID for a given pizza.
-     *
      * @param pizza The pizza to get the image resource for.
      * @return The image resource ID.
      */
@@ -282,7 +271,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Formats the Topping enum name to be user-friendly.
-     *
      * @param topping The Topping enum value.
      * @return A formatted string representation.
      */
@@ -302,7 +290,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Creates a new Chip with default properties for the given topping.
-     *
      * @param topping The topping for the chip.
      * @param selectedPizza The currently selected pizza.
      * @return The configured Chip instance.
@@ -325,7 +312,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Configures the Chip's behavior based on the selected pizza type and toppings.
-     *
      * @param chip The chip to configure.
      * @param topping The topping associated with the chip.
      * @param selectedPizza The currently selected pizza.
@@ -338,7 +324,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Sets up the chip's behavior for Build Your Own pizzas.
-     *
      * @param chip The chip to configure.
      * @param topping The topping associated with the chip.
      * @param selectedPizza The currently selected Build Your Own pizza.
@@ -360,7 +345,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Handles the selection/deselection of a chip.
-     *
      * @param chip The chip being interacted with.
      * @param topping The topping associated with the chip.
      * @param isChecked Whether the chip is checked.
@@ -386,7 +370,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Handles the action when a chip's close icon is clicked.
-     *
      * @param chip The chip associated with the topping.
      * @param topping The topping to remove.
      * @param selectedPizza The currently selected pizza.
@@ -401,7 +384,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Highlights the chip when selected.
-     *
      * @param chip The chip to highlight.
      */
     private void highlightChip(Chip chip) {
@@ -412,7 +394,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Resets the chip style to its default state.
-     *
      * @param chip The chip to reset.
      */
     private void resetChipStyle(Chip chip) {
@@ -438,6 +419,9 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Resets the selection after order is added to cart
+     */
     private void resetSelections() {
         resetSizeSelection();
         resetPrice();
@@ -446,7 +430,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
 
     /**
      * Updates the price display based on the selected pizza's price.
-     *
      * @param pizza The selected pizza.
      */
     private void updatePrice(Pizza pizza) {
@@ -464,6 +447,9 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
         finish(); // End current activity
     }
 
+    /**
+     * Adds the selected pizza to cart
+     */
     private void addToCart(){
         Pizza selectedPizza = pizzaList.get(currentPosition);
 

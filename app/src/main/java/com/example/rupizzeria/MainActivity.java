@@ -21,6 +21,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  */
 public class MainActivity extends AppCompatActivity {
 
+    /**
+     * Called when the activity is created.
+     * This method sets up the UI elements, handles navigation,
+     * and configures window insets for edge-to-edge displays.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
