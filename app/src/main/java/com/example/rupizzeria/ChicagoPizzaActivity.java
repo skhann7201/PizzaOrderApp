@@ -59,6 +59,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
             // Update price dynamically when size changes
             if (currentPizza != null) {
                 updatePrice(currentPizza);
+                // update the chipgroup (enable )
             }
         });
 
@@ -162,6 +163,17 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         currentPizza.getToppings().clear();
     }
 
+    private void highlightChip(Chip chip) {
+        chip.setChipBackgroundColorResource(R.color.chip_checked); // Highlight background color
+        chip.setChipStrokeWidth(2f); // Add border
+    }
+
+    private void resetChipStyle(Chip chip) {
+        chip.setChipBackgroundColorResource(R.color.chip_unchecked); // Default background color
+        chip.setChipStrokeWidth(0f); // No border
+    }
+
+
     private void updateToppings(Pizza pizza) {
         chipGroupToppings.removeAllViews(); // Clear existing chips
         List<Topping> allToppings = Arrays.asList(Topping.values());
@@ -174,20 +186,36 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         for (Topping topping : allToppings) {
             Chip chip = new Chip(this);
             chip.setText(formatToppingName(topping));
-            chip.setCheckable(true);
-            chip.setChecked(pizza.getToppings().contains(topping));
+
+            if(pizza.getToppings().contains(topping)){
+                highlightChip(chip);
+                chip.setEnabled(true);
+                chip.setCheckable(false);
+            }else {
+                resetChipStyle(chip);
+                chip.setEnabled(false);
+            }
 
             if (pizza instanceof BuildYourOwn) {
+                chip.setEnabled(true); // Enable chips for BYO
+                chip.setCheckable(true); // Allow selection for BYO
                 chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
-                        ((BuildYourOwn) pizza).addTopping(topping);
+                        if (pizza.getToppings().size() < 7) {
+                            ((BuildYourOwn) pizza).addTopping(topping);
+                            highlightChip(chip);
+                            chip.setCloseIconVisible(true);
+                        } else {
+                            chip.setChecked(false); // Revert check
+                            Toast.makeText(this, "Maximum 7 toppings allowed", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         ((BuildYourOwn) pizza).removeTopping(topping);
+                        resetChipStyle(chip);
+                        chip.setCloseIconVisible(false); // Hide the "X"
                     }
                     updatePrice(pizza);
                 });
-            } else {
-                chip.setEnabled(false); // Disable chips for non-BuildYourOwn pizzas
             }
 
             chipGroupToppings.addView(chip);
