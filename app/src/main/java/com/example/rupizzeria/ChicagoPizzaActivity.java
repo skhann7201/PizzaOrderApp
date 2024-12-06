@@ -35,6 +35,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     private TextView tvPrice;
     private ImageButton backButton;
     private Button placeOrder;
+    private TextView tvCrust;
 
     // Data
     private final PizzaFactory chicagoPizzaFactory = new ChicagoPizza();
@@ -74,6 +75,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         tvPrice = findViewById(R.id.tv_price);
         backButton = findViewById(R.id.btn_back);
         placeOrder = findViewById(R.id.btn_placeOrder);
+        tvCrust = findViewById(R.id.tv_pizzaCrust);
 
     }
 
@@ -170,8 +172,21 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
                 return;
         }
         updatePizzaImage();
+        updateCrustInfo();
         updateToppingsChips();
         updatePrice();
+    }
+
+    /**
+     * Updates the crust information displayed in the UI.
+     */
+    private void updateCrustInfo() {
+        if (currentPizza == null) {
+            tvCrust.setText("");
+            return;
+        }
+        String crustName = currentPizza.formatEnumName(currentPizza.getCrust().name());
+        tvCrust.setText(getString(R.string.crust_label, crustName));
     }
 
     /**
@@ -374,6 +389,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         tvPrice.setText(getString(R.string.pizza_price, "0.00"));
         imageView.setImageResource(R.drawable.chicago_default);
         resetChips();
+        tvCrust.setText("");
         currentPizza = null;
     }
 

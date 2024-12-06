@@ -5,20 +5,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
@@ -34,44 +30,80 @@ import java.util.List;
  */
 public class NewYorkPizzaActivity extends AppCompatActivity {
 
-    private ViewPager2 vp_pizza; //to scroll in the images
-    private TextView tv_price;  //the price of the selected item
-    private ChipGroup cg_toppings; //the toppings to select
+    // UI Components
+    private ImageView imageView;
+    private Spinner spinnerPizzaType;
+    private RadioGroup radioGroupPizzaSize;
+    private ChipGroup chipGroupToppings;
+    private TextView tvPrice;
+    private ImageButton backButton;
+    private Button placeOrder;
+    private TextView tvCrust;
 
-    private PizzaFactory NYPizzaFactory = new NYPizza();
-    private int currentPosition = 0;
-    private List<Pizza> pizzaList;
-    private List<Pizza> cartItems = new ArrayList<>();
+    // Data
+    private final PizzaFactory NYPizzaFactory = new NYPizza();
+    private List<Pizza> pizzaList; // list of available pizza options
+    private Pizza currentPizza; // tracking current selected pizza
+    private static final int MAX_TOPPINGS = 7;
+    private final ShareResource sharedResource = ShareResource.getInstance(); //Shared resource for data
 
+    /**
+     * Lifecycle method called when the activity is created.
+     * Initializes UI components, listeners, and data.
+     *
+     * @param savedInstanceState Saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ny_pizza);
 
-        // Initialize UI elements
-        vp_pizza = findViewById(R.id.vp_cartView);
-        tv_price = findViewById(R.id.tv_price);
-        cg_toppings = findViewById(R.id.cg_toppings);
-
-        // Populate pizzaList
+        findID();
+        setupListeners();
         setupPizzaList();
+        setupPizzaSpinner();
+        populateToppingsChips();
 
-        // Set up view pager
-        setupViewPager();
+        tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+    }
 
-        // Set up the size selection logic
-        setupSizeSelection();
-        // Initialize back button
-        ImageButton backButton = findViewById(R.id.btn_back);
-        backButton.setOnClickListener(v -> navigateBackToHome());
-
-        // Set up Add to Cart Button
-        findViewById(R.id.btn_placeOrder).setOnClickListener(v -> addToCart());
+    /**
+     * Finds and initializes all UI Components ID
+     */
+    private void findID() {
+        imageView = findViewById(R.id.imgv_pizza);
+        spinnerPizzaType = findViewById(R.id.spinner_pizzaType);
+        radioGroupPizzaSize = findViewById(R.id.radioGroupPizzaSize);
+        chipGroupToppings = findViewById(R.id.cg_toppings);
+        tvPrice = findViewById(R.id.tv_price);
+        backButton = findViewById(R.id.btn_back);
+        placeOrder = findViewById(R.id.btn_placeOrder);
+        tvCrust = findViewById(R.id.tv_pizzaCrust);
 
     }
 
     /**
-     * Initializes the list of pizzas available in the menu.
+     * Sets up listeners for UI interactions
+     */
+    private void setupListeners() {
+        // Radio Group for size
+        radioGroupPizzaSize.setOnCheckedChangeListener((group, checkedId) -> {
+            // Update price dynamically when size changes
+            if (currentPizza != null) {
+                // update the chipGroup (enable )
+                updateToppingsChips();
+                updatePrice();
+            }
+        });
+
+        // Place Order button
+        placeOrder.setOnClickListener(v -> addToCart());
+        // Back button
+        backButton.setOnClickListener(v -> navigateBackToHome());
+    }
+
+    /**
+     * Sets up the list of available pizzas for Chicago style.
      */
     private void setupPizzaList() {
         pizzaList = Arrays.asList(
@@ -83,406 +115,294 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets up the ViewPager2 to display pizzas and handles page change logic.
+     * Loads the pizza type spinner with pizza names.
      */
-    private void setupViewPager() {
-        vp_pizza.setAdapter(createViewPagerAdapter());
-        vp_pizza.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback(){
+    private void setupPizzaSpinner() {
+        // Extract pizza names for spinner
+        List<String> pizzaNames = new ArrayList<>();
+        pizzaNames.add("Select a pizza"); // Placeholder
+        pizzaList.forEach(pizza -> pizzaNames.add(pizza.getName()));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item, pizzaNames);
+        adapter.setDropDownViewResource(R.layout.spinner_item);
+        spinnerPizzaType.setAdapter(adapter);
+
+        spinnerPizzaType.setSelection(0); // Default option for spinner
+        spinnerPizzaType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onPageSelected(int position) {
-                handlePageChange(position);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                handlePizzaSelection(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Reset to default
+                resetUIState();
             }
         });
-        applyCarouselEffect(vp_pizza);
     }
 
     /**
-     * Creates the RecyclerView.Adapter for the ViewPager2 to display pizza details.
-     * @return A RecyclerView.Adapter for the pizza ViewPager2.
-     */
-    private RecyclerView.Adapter<NewYorkPizzaActivity.PizzaViewHolder> createViewPagerAdapter() {
-        return new RecyclerView.Adapter<NewYorkPizzaActivity.PizzaViewHolder>() { // Use NewYorkPizzaActivity.PizzaViewHolder
-            @NonNull
-            @Override
-            public NewYorkPizzaActivity.PizzaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.pizza_image_item, parent, false);
-                return new NewYorkPizzaActivity.PizzaViewHolder(view);  // Correct instantiation of PizzaViewHolder
-            }
-
-            @Override
-            public void onBindViewHolder(@NonNull NewYorkPizzaActivity.PizzaViewHolder holder, int position) {
-                // Bind image resource and other details
-                bindPizzaToView(holder, position);
-            }
-
-            @Override
-            public int getItemCount() {
-                // Return the total number of items in the list
-                return pizzaList.size();
-            }
-        };
-    }
-
-    /**
-     * Highlights the selected pizza in the ViewPager2.
+     * Handles the logic for selecting a pizza from the spinner.
      *
-     * @param holder The PizzaViewHolder for the selected pizza.
+     * @param position The index of the selected pizza.
      */
-    private void highlightSelectedPizza(NewYorkPizzaActivity.PizzaViewHolder holder) {
-        holder.cardView.setCardElevation(12f);
-        holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.primary_orange));
+    private void handlePizzaSelection(int position) {
+        if (position == 0) {
+            resetUIState();
+            return;
+        }
+        radioGroupPizzaSize.clearCheck(); // Clear size selection
+        resetChips();
+
+        // Create a fresh instance of the selected pizza
+        switch (position) {
+            case 1:
+                currentPizza = NYPizzaFactory.createDeluxe();
+                break;
+            case 2:
+                currentPizza = NYPizzaFactory.createMeatzza();
+                break;
+            case 3:
+                currentPizza = NYPizzaFactory.createBBQChicken();
+                break;
+            case 4:
+                currentPizza = NYPizzaFactory.createBuildYourOwn();
+                break;
+            default:
+                currentPizza = null; // Fallback
+                resetUIState();
+                return;
+        }
+        updatePizzaImage();
+        updateCrustInfo();
+        updateToppingsChips();
+        updatePrice();
     }
 
     /**
-     * Resets the highlight for non-selected pizzas in the ViewPager2.
-     * @param holder The PizzaViewHolder for a non-selected pizza.
+     * Updates the crust information displayed in the UI.
      */
-    private void resetPizzaHighlight(NewYorkPizzaActivity.PizzaViewHolder holder) {
-        holder.cardView.setCardElevation(8f);
-        holder.cardView.setCardBackgroundColor(ContextCompat.getColor(this, android.R.color.white));
+    private void updateCrustInfo() {
+        if (currentPizza == null) {
+            tvCrust.setText("");
+            return;
+        }
+        String crustName = currentPizza.formatEnumName(currentPizza.getCrust().name());
+        tvCrust.setText(getString(R.string.crust_label, crustName));
     }
 
     /**
-     * Binds a pizza's data (image and name) to the ViewHolder.
-     * @param holder The PizzaViewHolder to bind data to.
-     * @param position The position of the pizza in the list.
+     * Determines the selected size from the radio group.
+     *
+     * @return The selected Size (SMALL, MEDIUM, LARGE) or null if no size is selected.
      */
-    private void bindPizzaToView(NewYorkPizzaActivity.PizzaViewHolder holder, int position) {
-        Pizza pizza = pizzaList.get(position);
-        holder.imageView.setImageResource(getPizzaImageResource(pizza));
-        holder.textView.setText(pizza.getName());
+    private Size getSelectedSize() {
+        int selectedSizeId = radioGroupPizzaSize.getCheckedRadioButtonId();
+        if (selectedSizeId == R.id.rb_small) return Size.SMALL;
+        if (selectedSizeId == R.id.rb_medium) return Size.MEDIUM;
+        if (selectedSizeId == R.id.rb_large) return Size.LARGE;
+        return null; // No size selected
+    }
 
-        if (currentPosition == position) {
-            highlightSelectedPizza(holder);
-        } else {
-            resetPizzaHighlight(holder);
+    /**
+     * Updates the image view to reflect the selected pizza type.
+     */
+    private void updatePizzaImage() {
+        int imageRes = R.drawable.ny_default;
+        if (currentPizza != null) {
+            if (currentPizza instanceof Deluxe) imageRes = R.drawable.ny_deluxe;
+            else if (currentPizza instanceof Meatzza) imageRes = R.drawable.ny_meatzza;
+            else if (currentPizza instanceof BBQChicken) imageRes = R.drawable.ny_bbqchicken;
+            else if (currentPizza instanceof BuildYourOwn) imageRes = R.drawable.ny_byo;
+        }
+        // Default image
+        imageView.setImageResource(imageRes);
+    }
+
+    /**
+     * Create and populates the ChipGroup with chips for all available toppings.
+     */
+    private void populateToppingsChips() {
+        List<Topping> allToppings = Arrays.asList(Topping.values());
+        //Create chips
+        for (Topping topping : allToppings) {
+            Chip chip = new Chip(this);
+            chip.setText(sharedResource.formatToppingName(topping));
+            chip.setTag(topping); // Store the topping as a tag for easy identification
+            chip.setEnabled(false); // Initially disabled
+            chipGroupToppings.addView(chip);
         }
     }
 
     /**
-     * Resets the size selection RadioGroup to have no selected option.
-     */
-    private void resetSizeSelection() {
-        RadioGroup radioGroupSize = findViewById(R.id.radioGroupPizzaSize);
-        radioGroupSize.clearCheck();
-    }
-
-    /**
-     * Resets the price display to $0.00.
-     */
-    private void resetPrice() {
-        tv_price.setText("$0.00");
-    }
-
-    /**
-     * Handles changes in the ViewPager2's selected page.
-     * @param position The position of the newly selected page.
-     */
-    private void handlePageChange(int position) {
-        currentPosition = position;
-        vp_pizza.getAdapter().notifyDataSetChanged();
-        loadToppingsToChips();
-        resetSizeSelection();
-        resetPrice();
-    }
-
-    /**
-     * Sets up the RadioGroup for size selection and handles size change events.
-     */
-    private void setupSizeSelection(){
-        // set of size selection
-        RadioGroup radioGroupSize = findViewById(R.id.radioGroupPizzaSize);
-
-        radioGroupSize.setOnCheckedChangeListener((group,checkedId) ->
-                handleSizeSelection(checkedId));
-
-    }
-
-
-    /**
-     * Handles the selection of a pizza size and updates the price.
-     * @param checkedId The ID of the selected RadioButton.
-     */
-    private void handleSizeSelection(int checkedId){
-        Size selectedSize; // Declare a variable to store the selected size.
-
-        if (checkedId == R.id.rb_small) {
-            selectedSize = Size.SMALL;
-        } else if (checkedId == R.id.rb_medium) {
-            selectedSize = Size.MEDIUM;
-        } else if (checkedId == R.id.rb_large) {
-            selectedSize = Size.LARGE;
-        } else {
-            selectedSize = null; // Default or error case, if needed.
-        }
-
-        if (selectedSize != null) {
-            Pizza selectedPizza = pizzaList.get(currentPosition);
-            selectedPizza.setSize(selectedSize); // Assuming your Pizza class has a setSize method
-            updatePrice(selectedPizza);
-        }
-    }
-
-    /**
-     * Apply carousel effect with scaling and spacing for ViewPager2.
-     * @param viewPager The ViewPager2 instance.
-     */
-    private void applyCarouselEffect(ViewPager2 viewPager) {
-        viewPager.setClipToPadding(false);
-        viewPager.setClipChildren(false);
-        viewPager.setOffscreenPageLimit(3);
-
-        int horizontalMargin = getResources().getDimensionPixelSize(R.dimen.viewpager_item_margin);
-        viewPager.setPadding(horizontalMargin, 0, horizontalMargin, 0);
-
-        RecyclerView recyclerView = (RecyclerView) viewPager.getChildAt(0);
-        recyclerView.setClipToPadding(false);
-
-        viewPager.setPageTransformer((page, position) -> {
-            float absPos = Math.abs(position);
-            float scale = 0.85f + (1 - absPos) * 0.15f; // Scale pages
-            page.setScaleY(scale);
-        });
-
-        int itemMarginPx = getResources().getDimensionPixelSize(R.dimen.viewpager_item_margin);
-        recyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(@NonNull android.graphics.Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                outRect.left = itemMarginPx / 2;
-                outRect.right = itemMarginPx / 2;
-            }
-        });
-    }
-
-    /**
-     * Retrieves the image resource ID for a given pizza.
-     * @param pizza The pizza to get the image resource for.
-     * @return The image resource ID.
-     */
-    private int getPizzaImageResource(Pizza pizza) {
-        if (pizza instanceof Deluxe) return R.drawable.ny_deluxe;
-        if (pizza instanceof Meatzza) return R.drawable.ny_meatzza;
-        if (pizza instanceof BBQChicken) return R.drawable.ny_bbqchicken;
-        if (pizza instanceof BuildYourOwn) return R.drawable.ny_byo;
-        return R.drawable.chicago_style_bt; // Fallback image
-    }
-
-
-    /**
-     * Formats the Topping enum name to be user-friendly.
-     * @param topping The Topping enum value.
-     * @return A formatted string representation.
-     */
-    private String formatToppingName(Topping topping) {
-        String name = topping.name().toLowerCase().replace('_', ' '); // Convert to lowercase and replace underscores
-        String[] words = name.split(" "); // Split words by space
-        StringBuilder formattedName = new StringBuilder();
-
-        for (String word : words) {
-            formattedName.append(Character.toUpperCase(word.charAt(0)))
-                    .append(word.substring(1)) // Capitalize the first letter of each word
-                    .append(" ");
-        }
-
-        return formattedName.toString().trim();
-    }
-
-    /**
-     * Creates a new Chip with default properties for the given topping.
-     * @param topping The topping for the chip.
-     * @param selectedPizza The currently selected pizza.
-     * @return The configured Chip instance.
-     */
-    private Chip createChip(Topping topping, Pizza selectedPizza){
-        Chip chip = new Chip(this);
-        chip.setText(formatToppingName(topping));
-        chip.setCheckable(false);
-        chip.setClickable(false);
-        chip.setCloseIconVisible(false); // Hide "X" by default
-        chip.setChipStrokeWidth(0f); // No border initially
-        chip.setChipStrokeColor(null); // Ensure no stroke color
-        chip.setChipBackgroundColorResource(R.color.chip_unchecked); // Default background color
-
-        if (selectedPizza.getToppings().contains(topping)) {
-            highlightChip(chip);
-        }
-        return chip;
-    }
-
-    /**
-     * Configures the Chip's behavior based on the selected pizza type and toppings.
-     * @param chip The chip to configure.
-     * @param topping The topping associated with the chip.
-     * @param selectedPizza The currently selected pizza.
-     */
-    private void configureChipForTopping(Chip chip, Topping topping, Pizza selectedPizza) {
-        if (selectedPizza instanceof BuildYourOwn) {
-            setupBuildYourOwnChip(chip, topping, (BuildYourOwn) selectedPizza);
-        }
-    }
-
-    /**
-     * Sets up the chip's behavior for Build Your Own pizzas.
-     * @param chip The chip to configure.
-     * @param topping The topping associated with the chip.
-     * @param selectedPizza The currently selected Build Your Own pizza.
-     */
-    private void setupBuildYourOwnChip(Chip chip, Topping topping, BuildYourOwn selectedPizza) {
-        chip.setCloseIconVisible(false);
-        chip.setClickable(true);
-        chip.setCheckable(true);
-        chip.setChipBackgroundColorResource(chip.isChecked() ? R.color.chip_checked : R.color.chip_unchecked);
-
-        chip.setOnCloseIconClickListener(v -> {
-            handleChipCloseAction(chip, topping, selectedPizza);
-        });
-
-        chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            handleChipSelectionChange(chip, topping, isChecked, selectedPizza);
-        });
-    }
-
-    /**
-     * Handles the selection/deselection of a chip.
-     * @param chip The chip being interacted with.
-     * @param topping The topping associated with the chip.
-     * @param isChecked Whether the chip is checked.
-     * @param selectedPizza The currently selected Build Your Own pizza.
-     */
-    private void handleChipSelectionChange(Chip chip, Topping topping, boolean isChecked, BuildYourOwn selectedPizza) {
-        if (isChecked) {
-            if (selectedPizza.getToppings().size() >= 7) {
-                Toast.makeText(this, "Cannot add more than 7 toppings!", Toast.LENGTH_SHORT).show();
-                chip.setChecked(false); // Revert the selection
-            } else {
-                selectedPizza.addTopping(topping);
-                highlightChip(chip);
-                Toast.makeText(this, topping.name() + " added", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            resetChipStyle(chip);
-            selectedPizza.removeTopping(topping);
-            Toast.makeText(this, topping.name() + " removed", Toast.LENGTH_SHORT).show();
-        }
-        updatePrice(selectedPizza);
-    }
-
-    /**
-     * Handles the action when a chip's close icon is clicked.
-     * @param chip The chip associated with the topping.
-     * @param topping The topping to remove.
-     * @param selectedPizza The currently selected pizza.
-     */
-    private void handleChipCloseAction(Chip chip, Topping topping, BuildYourOwn selectedPizza) {
-        chip.setChecked(false); // Uncheck the chip
-        resetChipStyle(chip);
-        selectedPizza.removeTopping(topping); // Remove topping from the pizza
-        Toast.makeText(this, topping.name() + " removed", Toast.LENGTH_SHORT).show(); // Debug message
-        updatePrice(selectedPizza);
-    }
-
-    /**
-     * Highlights the chip when selected.
-     * @param chip The chip to highlight.
+     * Highlights a chip by changing its background color and border.
+     *
+     * @param chip The chip to highlight
      */
     private void highlightChip(Chip chip) {
         chip.setChipBackgroundColorResource(R.color.chip_checked); // Highlight background color
         chip.setChipStrokeWidth(2f); // Add border
-        chip.setCloseIconVisible(true); // Show the "X"
     }
 
     /**
-     * Resets the chip style to its default state.
-     * @param chip The chip to reset.
+     * Resets a chip to its default style.
+     *
+     * @param chip The chip to reset
      */
     private void resetChipStyle(Chip chip) {
         chip.setChipBackgroundColorResource(R.color.chip_unchecked); // Default background color
         chip.setChipStrokeWidth(0f); // No border
-        chip.setCloseIconVisible(false); // Hide the "X"
     }
 
     /**
-     * Loads the toppings for the selected pizza into the ChipGroup.
+     * Update the chips based on the selected pizza and size
      */
-    private void loadToppingsToChips() {
-        // Clear existing chips
-        cg_toppings.removeAllViews();
-
-        List<Topping> allToppings = Arrays.asList(Topping.values());
-        Pizza selectedPizza = pizzaList.get(currentPosition);
-
-        for (Topping topping : allToppings) {
-            Chip chip = createChip(topping, selectedPizza);
-            configureChipForTopping(chip, topping, selectedPizza);
-            cg_toppings.addView(chip);
-        }
-    }
-
-    /**
-     * Resets the selection after order is added to cart
-     */
-    private void resetSelections() {
-        resetSizeSelection();
-        resetPrice();
-        loadToppingsToChips();
-    }
-
-    /**
-     * Updates the price display based on the selected pizza's price.
-     * @param pizza The selected pizza.
-     */
-    private void updatePrice(Pizza pizza) {
-        tv_price.setText("$" + String.format("%.2f", pizza.price()));
-    }
-
-
-    /**
-     * Navigates back to the MainActivity.
-     */
-    private void navigateBackToHome(){
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Optional: Clears other activities
-        startActivity(intent);
-        finish(); // End current activity
-    }
-
-    /**
-     * Adds the selected pizza to cart
-     */
-    private void addToCart(){
-        Pizza selectedPizza = pizzaList.get(currentPosition);
-
-        if (selectedPizza.getSize() == null) {
-            Toast.makeText(this, "Please select a size before adding to the cart.", Toast.LENGTH_SHORT).show();
+    private void updateToppingsChips() {
+        if (currentPizza == null || getSelectedSize() == null) {
+            resetChips();
             return;
         }
 
-        ShareResource sharedResource = ShareResource.getInstance();
-        sharedResource.addPizzaToCart(selectedPizza, "New York Style");
+        for (int i = 0; i < chipGroupToppings.getChildCount(); i++) {
+            Chip chip = (Chip) chipGroupToppings.getChildAt(i);
+            Topping topping = (Topping) chip.getTag();
 
-        Toast.makeText(this, selectedPizza.getName() + " added to cart.", Toast.LENGTH_SHORT).show();
+            if (currentPizza instanceof BuildYourOwn) {
+                chip.setEnabled(true);
+                chip.setCheckable(true);
+                // Remove previous listeners to avoid duplicate calls
+                chip.setOnCheckedChangeListener(null);
 
-        // Optional: Reset selections after adding to the cart
-        resetSelections();
+                // Set listener for adding/removing toppings
+                chip.setOnCheckedChangeListener((buttonView, isChecked) ->
+                        handleBuildYourOwnTopping(chip, topping, isChecked));
+            } else {
+                if (currentPizza.getToppings().contains(topping)) {
+                    // Highlight chips for toppings in the selected pizza
+                    highlightChip(chip);
+                    chip.setEnabled(true);
+                    chip.setCheckable(false); // Non-checkable for predefined toppings
+                } else {
+                    // Reset chips for toppings not in the pizza
+                    resetChipStyle(chip);
+                }
+            }
+
+        }
     }
 
     /**
-     * ViewHolder class for displaying pizza details in the ViewPager2.
+     * Handles adding or removing toppings for "Build Your Own" pizzas.
+     *
+     * @param chip      The chip representing the topping.
+     * @param topping   The topping associated with the chip.
+     * @param isChecked Whether the chip is checked (selected).
      */
-    static class PizzaViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView textView;
-        CardView cardView;
+    private void handleBuildYourOwnTopping(Chip chip, Topping topping, boolean isChecked) {
+        if (!(currentPizza instanceof BuildYourOwn)) return; // Safety check
 
-        public PizzaViewHolder(@NonNull View itemView) {
-            super(itemView);
-            cardView = itemView.findViewById(R.id.cv_pizzaImages);
-            imageView = itemView.findViewById(R.id.imgv_pizzaImages);
-            textView = itemView.findViewById(R.id.tv_pizzaName);
+        if (isChecked) {
+            if (currentPizza.getToppings().size() < MAX_TOPPINGS) {
+                currentPizza.addTopping(topping);
+                highlightChip(chip);
+                chip.setCloseIconVisible(true); // Show close icon
+            } else {
+                chip.setChecked(false); // Revert check
+                Toast.makeText(this, "Maximum 7 toppings allowed", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            currentPizza.removeTopping(topping);
+            resetChipStyle(chip);
+            chip.setCloseIconVisible(false); // Hide close icon
         }
-
+        updatePrice();
     }
 
+    /**
+     * Updates the price based on the selected pizza and size.
+     */
+    private void updatePrice() {
+        Size size = getSelectedSize();
+        if (size == null) {
+            tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+            return;
+        }
+        currentPizza.setSize(size);
+        tvPrice.setText(String.format("$%.2f", currentPizza.price()));
+    }
 
+    /**
+     * Validates the current pizza selection before proceeding.
+     *
+     * @return true if both a pizza type and size have been selected;
+     *         false otherwise.
+     */
+    private boolean validatePizzaSelection() {
+        if(currentPizza == null) {
+            sharedResource.showAlertDialog(this,"Pizza Selection", "Please select a pizza type.");
+            return false;
+        }
+
+        // if size is not selected
+        if (getSelectedSize() == null) {
+            sharedResource.showAlertDialog(this,"Size Selection", "Please select a pizza size.");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Adds the selected pizza to the cart and resets the UI.
+     */
+    private void addToCart() {
+        // if spinner pizza type is not selected
+        if (!validatePizzaSelection()) return;
+
+        // Validation pass, add to cart
+        Size size = getSelectedSize();
+        currentPizza.setSize(size);
+        sharedResource.addPizzaToCart(currentPizza, "New York Style");
+        Toast.makeText(this, currentPizza.getName() + " added to cart.", Toast.LENGTH_SHORT).show();
+
+        // Reset UI states and data
+        resetUIState();
+    }
+
+    /**
+     *  Reset all chips in the ChipGroup to their default state.
+     */
+    private void resetChips() {
+        for (int i = 0; i < chipGroupToppings.getChildCount(); i++) {
+            Chip chip = (Chip) chipGroupToppings.getChildAt(i);
+            chip.setOnCheckedChangeListener(null); // Remove existing listeners
+            resetChipStyle(chip);
+            chip.setChecked(false);
+            chip.setCloseIconVisible(false);
+            chip.setEnabled(false); // Disable chips after resetting
+        }
+    }
+
+    /**
+     * Resets the UI to its default state.
+     */
+    private void resetUIState() {
+        spinnerPizzaType.setSelection(0);
+        radioGroupPizzaSize.clearCheck();
+        tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+        imageView.setImageResource(R.drawable.ny_default);
+        resetChips();
+        tvCrust.setText("");
+        currentPizza = null;
+    }
+
+    /**
+     * Navigate back to main screen
+     */
+    private void navigateBackToHome() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        finish();
+    }
 }

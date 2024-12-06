@@ -58,8 +58,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Size Selection -->
-
             <ImageView
                 android:id="@+id/imgv_pizza"
                 android:layout_width="match_parent"
@@ -72,6 +70,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp" />
+
+            <TextView
+                android:id="@+id/tv_pizzaCrust"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:fontFamily="@font/poppins_black_italic"
+                android:text="@string/crust_label"
+                android:textColor="@color/primary_red"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_pizzaType" />
 
             <TextView
                 android:id="@+id/tx_selectSize"
