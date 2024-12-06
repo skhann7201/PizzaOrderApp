@@ -7,11 +7,17 @@
     <string name="main_chicago_description">Deep-dish crust packed with rich layers of cheese, hearty toppings, and zesty tomato sauce, offering a thick, indulgent bite in every slice.</string>
     <string name="ny_style">New York Pizza Style</string>
     <string name="main_ny_description">Hand-stretched thin and cut into six big, foldable slices offering a perfect balance of sauce, cheese, and crust in every bite.</string>
+    <string name="pizza_image_description">Image of the selected pizza</string>
     <string name="select_size">Select Size: </string>
+    <string name="size_small">Small</string>
+    <string name="size_medium">Medium</string>
+    <string name="size_large">Large</string>
     <string name="select_toppings">Select Toppings:</string>
     <string name="pizza_price">$%s</string>
     <string name="back_button_description">Back button</string>
     <string name="addToCart_button">Add To Cart</string>
+
+
     <string name="nav_home">Home</string>
     <string name="nav_cart">Cart</string>
     <string name="nav_order">Order</string>

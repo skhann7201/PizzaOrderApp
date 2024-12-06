@@ -1,5 +1,6 @@
 package com.example.rupizzeria;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -123,19 +124,36 @@ public class ShareResource {
         return pizzaStyles.getOrDefault(pizza, "Unknown Style");
     }
 
+
     /**
-     * Formats a topping string.
-     * Capitalizes the first letter of each topping, except for specific cases like "BBQ Chicken."
+     * Displays an alert dialog with the given title and message.
      *
-     * @param topping The topping string to format.
-     * @return The formatted topping string.
+     * @param context The context of the activity or application
+     * @param title   The title of the dialog
+     * @param message The message of the dialog
      */
-    public static String formatTopping(String topping) {
-        if (topping.equalsIgnoreCase("bbq chicken")) {
+    public void showAlertDialog(Context context, String title, String message) {
+        new androidx.appcompat.app.AlertDialog.Builder(context)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
+    /**
+     * Formats a topping name for display.
+     *
+     * @param topping The topping to format
+     * @return The formatted topping name
+     */
+    public String formatToppingName(Topping topping) {
+        String name = topping.name().toLowerCase().replace('_', ' ');
+
+        // Special case handling BBQ Chicken
+        if (name.equalsIgnoreCase("bbq chicken")) {
             return "BBQ Chicken";
         }
-        // Capitalize the first letter and make the rest lowercase
-        return topping.substring(0, 1).toUpperCase() + topping.substring(1).toLowerCase();
+        return Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }
 
 }

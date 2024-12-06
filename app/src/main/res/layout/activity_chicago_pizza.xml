@@ -64,26 +64,22 @@
                 android:id="@+id/imgv_pizza"
                 android:layout_width="match_parent"
                 android:layout_height="183dp"
+                android:contentDescription="@string/pizza_image_description"
                 app:srcCompat="@drawable/chicago_default" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Select Pizza:" />
 
             <Spinner
                 android:id="@+id/spinner_pizzaType"
-                android:layout_width="368dp"
-                android:layout_height="47dp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp" />
 
             <TextView
                 android:id="@+id/tx_selectSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="Select Size:"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/select_size"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -95,24 +91,24 @@
 
                 <RadioButton
                     android:id="@+id/rb_small"
-                    android:layout_width="179dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="Small" />
+                    android:text="@string/size_small" />
 
                 <RadioButton
                     android:id="@+id/rb_medium"
-                    android:layout_width="181dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="Medium " />
+                    android:text="@string/size_medium" />
 
                 <RadioButton
                     android:id="@+id/rb_large"
-                    android:layout_width="184dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins"
-                    android:text="Large " />
+                    android:text="@string/size_large" />
 
             </RadioGroup>
 
@@ -122,7 +118,7 @@
                 android:layout_width="378dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Select Toppings:"
+                android:text="@string/select_toppings"
                 android:textSize="16sp" />
 
             <com.google.android.material.chip.ChipGroup
@@ -130,6 +126,7 @@
                 android:layout_width="383dp"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
+                android:visibility="visible"
                 app:selectionRequired="false"
                 app:singleSelection="false" />
 
@@ -156,7 +153,7 @@
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/arrow_back_btn_background"
-            android:contentDescription="Back Button"
+            android:contentDescription="@string/back_button_description"
             android:scaleType="center"
             android:src="@drawable/arrow_back" />
 
@@ -167,8 +164,8 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
             android:text="@string/chicago_style"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textColor="@color/primary_red"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
