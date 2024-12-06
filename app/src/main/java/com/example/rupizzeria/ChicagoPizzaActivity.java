@@ -72,7 +72,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
                 chicagoPizzaFactory.createMeatzza(),
                 chicagoPizzaFactory.createBBQChicken(),
                 chicagoPizzaFactory.createBuildYourOwn()
-        );// select none
+        );
     }
 
 
@@ -88,7 +88,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPizzaType.setAdapter(adapter);
 
-        // Initially set position to -1
+        // Initially set position to 0
         spinnerPizzaType.setSelection(0);
 
         spinnerPizzaType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -101,11 +101,29 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
                     chipGroupToppings.removeAllViews(); // Clear toppings
                     imageView.setImageResource(R.drawable.chicago_default); // Default image
                 } else {
-                    // Adjust position for actual pizzas (offset by 1 due to placeholder)
-                    currentPizza = pizzaList.get(position - 1);
-                    updatePizzaImage(currentPizza);
-                    updateToppings(currentPizza);
-                    updatePrice(currentPizza);
+                    // Create a new instance of the selected pizza
+                    switch (position) {
+                        case 1:
+                            currentPizza = chicagoPizzaFactory.createDeluxe();
+                            break;
+                        case 2:
+                            currentPizza = chicagoPizzaFactory.createMeatzza();
+                            break;
+                        case 3:
+                            currentPizza = chicagoPizzaFactory.createBBQChicken();
+                            break;
+                        case 4:
+                            currentPizza = chicagoPizzaFactory.createBuildYourOwn();
+                            break;
+                        default:
+                            currentPizza = null; // Safety fallback
+                    }
+
+                    if (currentPizza != null) {
+                        updatePizzaImage(currentPizza);
+                        updateToppings(currentPizza);
+                        updatePrice(currentPizza);
+                    }
                 }
             }
 
@@ -140,10 +158,18 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
 
         imageView.setImageResource(imageRes);
     }
+    public void clearToppings() {
+        currentPizza.getToppings().clear();
+    }
 
     private void updateToppings(Pizza pizza) {
         chipGroupToppings.removeAllViews(); // Clear existing chips
         List<Topping> allToppings = Arrays.asList(Topping.values());
+
+        // Clear toppings if it's a fresh "Build Your Own" pizza
+        if (pizza instanceof BuildYourOwn) {
+            clearToppings(); // Ensure toppings are cleared
+        }
 
         for (Topping topping : allToppings) {
             Chip chip = new Chip(this);
@@ -201,6 +227,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         radioGroupPizzaSize.clearCheck();
         tvPrice.setText("$0.00");
         updateToppings(pizzaList.get(0));
+        currentPizza = null;
 
 
     }
