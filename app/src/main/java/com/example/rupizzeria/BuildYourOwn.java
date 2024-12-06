@@ -53,7 +53,7 @@ public class BuildYourOwn extends Pizza {
                 break;
             case LARGE: basePrice = 12.99;
                 break;
-            default: throw new IllegalStateException("Size not set");
+            default: basePrice = 0.00;
         }
         totalPrice = basePrice + (getToppings().size() * PRICE_PER_TOPPING);
         // Format to two decimal places
