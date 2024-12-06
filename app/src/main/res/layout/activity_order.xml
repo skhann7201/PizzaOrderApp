@@ -40,7 +40,6 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- ListView for Orders -->
     <ListView
         android:id="@+id/lv_orders"
         android:layout_width="0dp"
@@ -83,11 +82,13 @@
             android:textStyle="bold"
             android:paddingBottom="8dp" />
 
-        <!-- Order Item Details -->
-        <ListView
-            android:id="@+id/lv_order_items"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_order_items"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         <!-- Total Section -->
         <LinearLayout

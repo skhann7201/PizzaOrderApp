@@ -19,7 +19,7 @@
     <string name="addToCart_button">Add To Cart</string>
 
     <string name="cart_header">Your Cart</string>
-    <string name="order_id">OrderID: %d</string>
+    <string name="order_id">Order ID: %d</string>
     <string name="order_quantity">Total Items: %d</string>
 
     <string name="subtotal">Subtotal: $%.2fs</string>
@@ -28,7 +28,7 @@
     <string name="place_order">Place Order</string>
     <string name="remove_button_description">Remove pizza button</string>
     <string name="pizza_style">%s</string>
-    <string name="pizza_crust">%s</string>
+    <string name="pizza_crust">Crust: %s</string>
     <string name="pizza_type_size">%s (%s)</string>
     <string name="pizza_toppings">%s</string>
 

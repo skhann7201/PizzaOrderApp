@@ -8,4 +8,5 @@
     <color name="primary_yellow"> #f7d012</color>
     <color name="primary_beige">#f8efd9</color>
     <color name="primary_orange">#fbab23</color>
+    <color name="pizza_type">#bb3e00</color>
 </resources>
