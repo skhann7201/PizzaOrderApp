@@ -2,6 +2,7 @@ package com.example.rupizzeria;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CartActivity extends AppCompatActivity {
     private RecyclerView rvCartItems;
     private TextView tvOrderId, tvTotalItems, tvSubtotal, tvTax, tvTotal;
+    private ImageButton backButton;
+    private Button placeOrderButton;
 
     private ShareResource shareResource; //reference to the shared resource
 
@@ -29,13 +32,7 @@ public class CartActivity extends AppCompatActivity {
 
         shareResource = ShareResource.getInstance();
 
-        // Initialize UI elements
-        rvCartItems = findViewById(R.id.rv_cart_items);
-        tvOrderId = findViewById(R.id.tv_order_id);
-        tvTotalItems = findViewById(R.id.tv_total_items);
-        tvSubtotal = findViewById(R.id.tv_subtotal);
-        tvTax = findViewById(R.id.tv_tax);
-        tvTotal = findViewById(R.id.tv_total);
+        findID();
 
         setUpRecyclerView();
 
@@ -43,8 +40,19 @@ public class CartActivity extends AppCompatActivity {
 
         findViewById(R.id.btn_placeOrder).setOnClickListener(v -> placeOrder());
 
-        ImageButton backButton = findViewById(R.id.btn_back);
         backButton.setOnClickListener(v -> navigateBackToHome());
+    }
+
+    private void findID(){
+        // Initialize UI elements
+        rvCartItems = findViewById(R.id.rv_cart_items);
+        tvOrderId = findViewById(R.id.tv_order_id);
+        tvTotalItems = findViewById(R.id.tv_total_items);
+        tvSubtotal = findViewById(R.id.tv_subtotal);
+        tvTax = findViewById(R.id.tv_tax);
+        tvTotal = findViewById(R.id.tv_total);
+        backButton = findViewById(R.id.btn_back);
+        placeOrderButton = findViewById(R.id.btn_placeOrder);
     }
 
     /**
@@ -62,27 +70,20 @@ public class CartActivity extends AppCompatActivity {
      * Method to update the order details (total items, subtotal, tax, total).
      */
     private void updateOrderDetails() {
-        // Get the current order details
-        int totalItems = shareResource.getCartItems().size();
-        double subtotal = 0;
-        double tax = 0;
+        Order currentOrder = shareResource.getCurrentOrder();
 
-        // Calculate subtotal
-        for (Pizza pizza : shareResource.getCartItems()) {
-            subtotal += pizza.price();  // Make sure the price method is defined in Pizza
-        }
+        int orderID = currentOrder.getOrderNumber();
+        int orderQuantity = currentOrder.getOrderQuantity();
+        double subtotal = currentOrder.getSubtotal();
+        double salesTax = currentOrder.getSalesTax();
+        double totalPrice = currentOrder.getTotalPrice();
 
-        // Assuming tax rate is 8%
-        tax = subtotal * 0.06625;
-
-        double total = subtotal + tax;
-
-        // Update the UI with the calculated values
-        tvOrderId.setText("Order ID: " + shareResource.getCurrentOrder().getOrderNumber());
-        tvTotalItems.setText("Total Items: " + totalItems);
-        tvSubtotal.setText("Subtotal: $" + String.format("%.2f", subtotal));
-        tvTax.setText("Sales Tax: $" + String.format("%.2f", tax));
-        tvTotal.setText("Total: $" + String.format("%.2f", total));
+        // Update UI components with the order details
+        tvOrderId.setText(getString(R.string.order_id, orderID)); // Order ID
+        tvTotalItems.setText(getString(R.string.order_quantity, orderQuantity)); // Total items
+        tvSubtotal.setText(getString(R.string.subtotal, subtotal)); // Subtotal
+        tvTax.setText(getString(R.string.sale_tax, salesTax)); // Sales tax
+        tvTotal.setText(getString(R.string.total_price, totalPrice)); // Total price
     }
 
     /**
@@ -103,24 +104,26 @@ public class CartActivity extends AppCompatActivity {
 
         // check if the cart is empty
         if (shareResource.getCartItems().isEmpty()) {
-            Toast.makeText(this, "Cart is empty. Add items to place an order.", Toast.LENGTH_SHORT).show();
+            shareResource.showAlertDialog(this, "Empty Cart", "Your cart is empty. Please add items to place an order.");
             return;
         }
 
         Order currentOrder = shareResource.getCurrentOrder();
         shareResource.addOrder(currentOrder);
 
-
+        // start new order
         shareResource.startNewOrder();
 
+        // update order details
         updateOrderDetails();
 
-
-        //show order activity
+        //show order activity right away
         Intent intent = new Intent(this, OrderActivity.class);
         startActivity(intent);
         finish();
     }
+
+
 
     /**
      * Navigates back to the MainActivity.

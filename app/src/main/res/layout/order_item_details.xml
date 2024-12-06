@@ -27,7 +27,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/tv_pizza_type"
+            android:id="@+id/pizza_type_size"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Type: Deluxe"

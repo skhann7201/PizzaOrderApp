@@ -156,4 +156,31 @@ public class ShareResource {
         return Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }
 
+    /**
+     * Determines the image resource for a given pizza based on its style and type.
+     *
+     * @param pizza The pizza whose image resource is to be determined.
+     * @return The resource ID of the corresponding image.
+     */
+    public int getPizzaImageResource(Pizza pizza) {
+        if (pizza == null) return R.drawable.pizzeria_logo; // Default fallback image
+
+        // Check the style and subtype to determine the resource
+        String style = getPizzaStyle(pizza); // Example: "Chicago Pizza" or "New York Pizza"
+
+        if ("Chicago Style".equalsIgnoreCase(style)) {
+            if (pizza instanceof Deluxe) return R.drawable.chicago_deluxe;
+            if (pizza instanceof Meatzza) return R.drawable.chicago_meatzza;
+            if (pizza instanceof BBQChicken) return R.drawable.chicago_bbqchicken;
+            if (pizza instanceof BuildYourOwn) return R.drawable.chicago_byo;
+        } else if ("New York Style".equalsIgnoreCase(style)) {
+            if (pizza instanceof Deluxe) return R.drawable.ny_deluxe;
+            if (pizza instanceof Meatzza) return R.drawable.ny_meatzza;
+            if (pizza instanceof BBQChicken) return R.drawable.ny_bbqchicken;
+            if (pizza instanceof BuildYourOwn) return R.drawable.ny_byo;
+        }
+
+        return R.drawable.pizzeria_logo; // Fallback image
+    }
+
 }

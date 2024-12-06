@@ -1,10 +1,11 @@
 package com.example.rupizzeria;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -57,14 +58,32 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         Pizza pizza = cartItems.get(position);
 
-        // Log pizza details for debugging
-        Log.d("CartAdapter", "Pizza: " + pizza.getName() + " Type: " + pizza.getName());
+        String type = pizza.formatEnumName(pizza.getName());
+        String crust = pizza.formatEnumName(pizza.getCrust().name());
+        String size = pizza.formatEnumName(pizza.getSize().name());
+        // Format toppings as a comma-separated string using StringBuilder
+        StringBuilder toppingsBuilder = new StringBuilder();
+        for (Topping topping : pizza.getToppings()) {
+            if (toppingsBuilder.length() > 0) {
+                toppingsBuilder.append(", ");
+            }
+            toppingsBuilder.append(ShareResource.getInstance().formatToppingName(topping));
+        }
+        String toppings = toppingsBuilder.length() > 0 ? toppingsBuilder.toString() : "No Toppings";
 
-        holder.tvPizzaName.setText(ShareResource.getInstance().getPizzaStyle(pizza));
-        holder.tvPizzaType.setText("Type: " + pizza.getName());
-        holder.tvPizzaSize.setText("Size: " + pizza.getSize());
-        holder.tvPizzaToppings.setText("Toppings: " + pizza.getToppings());
-        holder.tvPizzaPrice.setText("Price: $" + pizza.price());
+        // Access context from the itemView of the holder
+        Context context = holder.itemView.getContext();
+
+        // Using string resources for formatting
+        holder.tvPizzaName.setText(context.getString(R.string.pizza_style, ShareResource.getInstance().getPizzaStyle(pizza)));
+        holder.tvPizzaTypeAndSize.setText(context.getString(R.string.pizza_type_size, type, size));
+        holder.tvPizzaCrust.setText(context.getString(R.string.pizza_crust,crust));
+        holder.tvPizzaToppings.setText(context.getString(R.string.pizza_toppings, toppings));
+        holder.tvPizzaPrice.setText(context.getString(R.string.pizza_price, pizza.price()));
+
+        // Set the pizza image
+        int imageResource = ShareResource.getInstance().getPizzaImageResource(pizza);
+        holder.pizzaImage.setImageResource(imageResource);
 
         holder.btnRemovePizza.setOnClickListener(v -> {
             if (onPizzaRemoveListener != null) {
@@ -88,7 +107,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
      */
     public static class CartViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView tvPizzaName, tvPizzaType, tvPizzaSize, tvPizzaToppings, tvPizzaPrice;
+        private final TextView tvPizzaName, tvPizzaCrust, tvPizzaTypeAndSize, tvPizzaToppings, tvPizzaPrice;
+        private final ImageView pizzaImage;
         private final ImageButton btnRemovePizza; // Button to remove pizza from the cart
         private final CardView cardView;
 
@@ -100,9 +120,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             super(itemView);
 
             // Initialize views by finding them in the itemView
+            pizzaImage = itemView.findViewById(R.id.img_pizza);
             tvPizzaName = itemView.findViewById(R.id.tv_pizza_style);
-            tvPizzaType = itemView.findViewById(R.id.tv_pizza_type);
-            tvPizzaSize = itemView.findViewById(R.id.tv_pizza_size);
+            tvPizzaCrust = itemView.findViewById(R.id.pizza_crust);
+            tvPizzaTypeAndSize = itemView.findViewById(R.id.pizza_type_size);
             tvPizzaToppings = itemView.findViewById(R.id.tv_pizza_toppings);
             tvPizzaPrice = itemView.findViewById(R.id.tv_pizza_price);
             btnRemovePizza = itemView.findViewById(R.id.btn_remove);

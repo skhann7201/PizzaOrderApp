@@ -14,12 +14,28 @@
     <string name="size_medium">Medium</string>
     <string name="size_large">Large</string>
     <string name="select_toppings">Select Toppings:</string>
-    <string name="pizza_price">$%s</string>
+    <string name="pizza_price">$%.2f</string>
     <string name="back_button_description">Back button</string>
     <string name="addToCart_button">Add To Cart</string>
 
+    <string name="cart_header">Your Cart</string>
+    <string name="order_id">OrderID: %d</string>
+    <string name="order_quantity">Total Items: %d</string>
+
+    <string name="subtotal">Subtotal: $%.2fs</string>
+    <string name="sale_tax">Sales Tax: $%.2fs</string>
+    <string name="total_price">Total: $%.2fs</string>
+    <string name="place_order">Place Order</string>
+    <string name="remove_button_description">Remove pizza button</string>
+    <string name="pizza_style">%s</string>
+    <string name="pizza_crust">%s</string>
+    <string name="pizza_type_size">%s (%s)</string>
+    <string name="pizza_toppings">%s</string>
 
     <string name="nav_home">Home</string>
     <string name="nav_cart">Cart</string>
     <string name="nav_order">Order</string>
+
+
+
 </resources>

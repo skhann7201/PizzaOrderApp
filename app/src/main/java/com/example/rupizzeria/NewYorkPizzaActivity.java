@@ -2,9 +2,7 @@ package com.example.rupizzeria;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -64,7 +62,7 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
         setupPizzaSpinner();
         populateToppingsChips();
 
-        tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+        tvPrice.setText(getString(R.string.pizza_price, 0.00));
     }
 
     /**
@@ -325,11 +323,11 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
     private void updatePrice() {
         Size size = getSelectedSize();
         if (size == null) {
-            tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+            tvPrice.setText(getString(R.string.pizza_price, 0.00));
             return;
         }
         currentPizza.setSize(size);
-        tvPrice.setText(String.format("$%.2f", currentPizza.price()));
+        tvPrice.setText(getString(R.string.pizza_price, currentPizza.price()));
     }
 
     /**
@@ -389,7 +387,7 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
     private void resetUIState() {
         spinnerPizzaType.setSelection(0);
         radioGroupPizzaSize.clearCheck();
-        tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+        tvPrice.setText(getString(R.string.pizza_price, 0.00));
         imageView.setImageResource(R.drawable.ny_default);
         resetChips();
         tvCrust.setText("");

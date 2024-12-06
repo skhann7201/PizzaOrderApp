@@ -61,7 +61,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         setupPizzaSpinner();
         populateToppingsChips();
 
-        tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+        tvPrice.setText(getString(R.string.pizza_price, 0.00));
     }
 
     /**
@@ -322,11 +322,11 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     private void updatePrice() {
         Size size = getSelectedSize();
         if (size == null) {
-            tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+            tvPrice.setText(getString(R.string.pizza_price, 0.00));
             return;
         }
         currentPizza.setSize(size);
-        tvPrice.setText(String.format("$%.2f", currentPizza.price()));
+        tvPrice.setText(getString(R.string.pizza_price, currentPizza.price()));
     }
 
     /**
@@ -386,7 +386,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     private void resetUIState() {
         spinnerPizzaType.setSelection(0);
         radioGroupPizzaSize.clearCheck();
-        tvPrice.setText(getString(R.string.pizza_price, "0.00"));
+        tvPrice.setText(getString(R.string.pizza_price, 0.00));
         imageView.setImageResource(R.drawable.chicago_default);
         resetChips();
         tvCrust.setText("");

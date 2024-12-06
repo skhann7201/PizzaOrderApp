@@ -31,7 +31,7 @@
                 android:layout_height="48dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/arrow_back_btn_background"
-                android:contentDescription="Back Button"
+                android:contentDescription="@string/back_button_description"
                 android:scaleType="center"
                 android:src="@drawable/arrow_back" />
 
@@ -40,10 +40,10 @@
                 android:id="@+id/tv_headerTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:text="Your Cart"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/cart_header"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -52,20 +52,26 @@
             android:id="@+id/tv_order_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
-            android:text="Order ID: 12345"
+            android:fontFamily="@font/poppins_bold"
+            android:paddingTop="8dp"
+            android:text="@string/order_id"
             android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:paddingTop="8dp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_total_items"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins"
-            android:text="Total Items: 3"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/order_quantity"
             android:textColor="@android:color/black"
             android:textSize="14sp" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/primary_orange" />
     </LinearLayout>
 
     <!-- Item List Section -->
@@ -96,8 +102,8 @@
             android:id="@+id/tv_subtotal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Subtotal: $0.00"
-            android:fontFamily="@font/poppins_semibold"
+            android:fontFamily="@font/poppins"
+            android:text="@string/subtotal"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
 
@@ -105,20 +111,26 @@
             android:id="@+id/tv_tax"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sales Tax: $0.00"
-            android:fontFamily="@font/poppins_semibold"
+            android:fontFamily="@font/poppins"
+            android:text="@string/sale_tax"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/primary_orange"
+            android:backgroundTint="@color/primary_orange" />
 
         <TextView
             android:id="@+id/tv_total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Total: $0.00"
             android:fontFamily="@font/poppins_bold"
+            android:paddingBottom="8dp"
+            android:text="@string/total_price"
             android:textColor="@android:color/white"
-            android:textSize="16sp"
-            android:paddingBottom="8dp" />
+            android:textSize="16sp" />
 
         <!-- Place Order Button -->
         <com.google.android.material.button.MaterialButton
@@ -127,11 +139,11 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Place Order"
+            android:text="@string/place_order"
             android:textAllCaps="false"
-            android:textColor="@color/primary_red"
+            android:textColor="@color/black"
             android:textSize="16sp"
-            app:backgroundTint="@color/white"
+            app:backgroundTint="@color/primary_yellow"
             app:cornerRadius="10dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
