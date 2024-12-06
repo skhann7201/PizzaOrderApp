@@ -79,6 +79,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     private void setupPizzaSpinner() {
         // Extract pizza names for spinner
         List<String> pizzaNames = new ArrayList<>();
+        pizzaNames.add("Select a pizza"); // Placeholder
         for (Pizza pizza : pizzaList) {
             pizzaNames.add(pizza.getName());
         }
@@ -88,16 +89,23 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         spinnerPizzaType.setAdapter(adapter);
 
         // Initially set position to -1
-        spinnerPizzaType.setSelection(-1);
+        spinnerPizzaType.setSelection(0);
 
         spinnerPizzaType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= 0) {
-                    currentPizza = pizzaList.get(position);
+                if (position == 0) {
+                    // Placeholder selected
+                    currentPizza = null;
+                    tvPrice.setText("$0.00");
+                    chipGroupToppings.removeAllViews(); // Clear toppings
+                    imageView.setImageResource(R.drawable.chicago_default); // Default image
+                } else {
+                    // Adjust position for actual pizzas (offset by 1 due to placeholder)
+                    currentPizza = pizzaList.get(position - 1);
                     updatePizzaImage(currentPizza);
                     updateToppings(currentPizza);
-                    updatePrice(currentPizza); // Update price only if size is selected
+                    updatePrice(currentPizza);
                 }
             }
 
@@ -189,10 +197,12 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         sharedResource.addPizzaToCart(currentPizza, "Chicago Style");
         Toast.makeText(this, currentPizza.getName() + " added to cart.", Toast.LENGTH_SHORT).show();
 
-        spinnerPizzaType.setSelection(-1);
+        spinnerPizzaType.setSelection(0);
         radioGroupPizzaSize.clearCheck();
         tvPrice.setText("$0.00");
         updateToppings(pizzaList.get(0));
+
+
     }
 
     private String formatToppingName(Topping topping) {
