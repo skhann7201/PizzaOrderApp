@@ -22,7 +22,6 @@
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <!-- Back Button -->
             <ImageButton
                 android:id="@+id/btn_back"
                 android:layout_width="48dp"
@@ -33,7 +32,6 @@
                 android:scaleType="center"
                 android:src="@drawable/arrow_back" />
 
-            <!-- Title -->
             <TextView
                 android:id="@+id/tv_headerTitle"
                 android:layout_width="wrap_content"

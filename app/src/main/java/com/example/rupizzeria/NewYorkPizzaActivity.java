@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -116,7 +117,6 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
      * Loads the pizza type spinner with pizza names.
      */
     private void setupPizzaSpinner() {
-        // Extract pizza names for spinner
         List<String> pizzaNames = new ArrayList<>();
         pizzaNames.add("Select a pizza"); // Placeholder
         pizzaList.forEach(pizza -> pizzaNames.add(pizza.getName()));
@@ -125,7 +125,7 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(R.layout.spinner_item);
         spinnerPizzaType.setAdapter(adapter);
 
-        spinnerPizzaType.setSelection(0); // Default option for spinner
+        spinnerPizzaType.setSelection(0);
         spinnerPizzaType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -146,29 +146,38 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
      * @param position The index of the selected pizza.
      */
     private void handlePizzaSelection(int position) {
+
+        setRadioGroupEnabled(radioGroupPizzaSize, false);
+
         if (position == 0) {
             resetUIState();
             return;
         }
-        radioGroupPizzaSize.clearCheck(); // Clear size selection
+        radioGroupPizzaSize.clearCheck();
         resetChips();
 
-        // Create a fresh instance of the selected pizza
         switch (position) {
             case 1:
                 currentPizza = NYPizzaFactory.createDeluxe();
+                setRadioGroupEnabled(radioGroupPizzaSize, true);
+
                 break;
             case 2:
                 currentPizza = NYPizzaFactory.createMeatzza();
+                setRadioGroupEnabled(radioGroupPizzaSize, true);
+
                 break;
             case 3:
                 currentPizza = NYPizzaFactory.createBBQChicken();
+                setRadioGroupEnabled(radioGroupPizzaSize, true);
+
                 break;
             case 4:
                 currentPizza = NYPizzaFactory.createBuildYourOwn();
+                setRadioGroupEnabled(radioGroupPizzaSize, true);
                 break;
             default:
-                currentPizza = null; // Fallback
+                currentPizza = null;
                 resetUIState();
                 return;
         }
@@ -200,7 +209,7 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
         if (selectedSizeId == R.id.rb_small) return Size.SMALL;
         if (selectedSizeId == R.id.rb_medium) return Size.MEDIUM;
         if (selectedSizeId == R.id.rb_large) return Size.LARGE;
-        return null; // No size selected
+        return null;
     }
 
     /**
@@ -269,24 +278,32 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
             if (currentPizza instanceof BuildYourOwn) {
                 chip.setEnabled(true);
                 chip.setCheckable(true);
-                // Remove previous listeners to avoid duplicate calls
                 chip.setOnCheckedChangeListener(null);
 
-                // Set listener for adding/removing toppings
                 chip.setOnCheckedChangeListener((buttonView, isChecked) ->
                         handleBuildYourOwnTopping(chip, topping, isChecked));
             } else {
                 if (currentPizza.getToppings().contains(topping)) {
-                    // Highlight chips for toppings in the selected pizza
                     highlightChip(chip);
                     chip.setEnabled(true);
-                    chip.setCheckable(false); // Non-checkable for predefined toppings
+                    chip.setCheckable(false);
                 } else {
-                    // Reset chips for toppings not in the pizza
                     resetChipStyle(chip);
                 }
             }
 
+        }
+    }
+
+    /**
+     * Helper method to enable or disable a RadioGroup and its RadioButtons.
+     */
+    private void setRadioGroupEnabled(RadioGroup radioGroup, boolean enabled) {
+        for (int i = 0; i < radioGroup.getChildCount(); i++) {
+            View child = radioGroup.getChildAt(i);
+            if (child instanceof RadioButton) {
+                child.setEnabled(enabled);
+            }
         }
     }
 
@@ -357,13 +374,11 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
         // if spinner pizza type is not selected
         if (!validatePizzaSelection()) return;
 
-        // Validation pass, add to cart
         Size size = getSelectedSize();
         currentPizza.setSize(size);
         sharedResource.addPizzaToCart(currentPizza, "New York Style");
         Toast.makeText(this, currentPizza.getName() + " added to cart.", Toast.LENGTH_SHORT).show();
 
-        // Reset UI states and data
         resetUIState();
     }
 

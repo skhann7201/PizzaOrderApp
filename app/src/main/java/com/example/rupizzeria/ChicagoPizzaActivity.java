@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -85,9 +86,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     private void setupListeners() {
         // Radio Group for size
         radioGroupPizzaSize.setOnCheckedChangeListener((group, checkedId) -> {
-            // Update price dynamically when size changes
             if (currentPizza != null) {
-                // update the chipGroup (enable )
                 updateToppingsChips();
                 updatePrice();
             }
@@ -133,7 +132,6 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Reset to default
                 resetUIState();
             }
         });
@@ -141,33 +139,42 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
 
     /**
      * Handles the logic for selecting a pizza from the spinner.
-     *
      * @param position The index of the selected pizza.
      */
     private void handlePizzaSelection(int position) {
+
+        setRadioGroupEnabled(radioGroupPizzaSize, false);
+
         if (position == 0) {
             resetUIState();
             return;
         }
-        radioGroupPizzaSize.clearCheck(); // Clear size selection
+        radioGroupPizzaSize.clearCheck();
         resetChips();
 
-        // Create a fresh instance of the selected pizza
         switch (position) {
             case 1:
                 currentPizza = chicagoPizzaFactory.createDeluxe();
+                setRadioGroupEnabled(radioGroupPizzaSize, true);
+
                 break;
             case 2:
                 currentPizza = chicagoPizzaFactory.createMeatzza();
+                setRadioGroupEnabled(radioGroupPizzaSize, true);
+
                 break;
             case 3:
                 currentPizza = chicagoPizzaFactory.createBBQChicken();
+                setRadioGroupEnabled(radioGroupPizzaSize, true);
+
                 break;
             case 4:
                 currentPizza = chicagoPizzaFactory.createBuildYourOwn();
+                setRadioGroupEnabled(radioGroupPizzaSize, true);
+
                 break;
             default:
-                currentPizza = null; // Fallback
+                currentPizza = null;
                 resetUIState();
                 return;
         }
@@ -199,7 +206,7 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         if (selectedSizeId == R.id.rb_small) return Size.SMALL;
         if (selectedSizeId == R.id.rb_medium) return Size.MEDIUM;
         if (selectedSizeId == R.id.rb_large) return Size.LARGE;
-        return null; // No size selected
+        return null;
     }
 
     /**
@@ -226,8 +233,8 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
         for (Topping topping : allToppings) {
             Chip chip = new Chip(this);
             chip.setText(sharedResource.formatToppingName(topping));
-            chip.setTag(topping); // Store the topping as a tag for easy identification
-            chip.setEnabled(false); // Initially disabled
+            chip.setTag(topping);
+            chip.setEnabled(false);
             chipGroupToppings.addView(chip);
         }
     }
@@ -239,17 +246,16 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
      */
     private void highlightChip(Chip chip) {
         chip.setChipBackgroundColorResource(R.color.chip_checked); // Highlight background color
-        chip.setChipStrokeWidth(2f); // Add border
+        chip.setChipStrokeWidth(2f);
     }
 
     /**
      * Resets a chip to its default style.
-     *
      * @param chip The chip to reset
      */
     private void resetChipStyle(Chip chip) {
-        chip.setChipBackgroundColorResource(R.color.chip_unchecked); // Default background color
-        chip.setChipStrokeWidth(0f); // No border
+        chip.setChipBackgroundColorResource(R.color.chip_unchecked);
+        chip.setChipStrokeWidth(0f);
     }
 
     /**
@@ -268,24 +274,32 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
             if (currentPizza instanceof BuildYourOwn) {
                 chip.setEnabled(true);
                 chip.setCheckable(true);
-                // Remove previous listeners to avoid duplicate calls
                 chip.setOnCheckedChangeListener(null);
 
-                // Set listener for adding/removing toppings
                 chip.setOnCheckedChangeListener((buttonView, isChecked) ->
                         handleBuildYourOwnTopping(chip, topping, isChecked));
             } else {
                 if (currentPizza.getToppings().contains(topping)) {
-                    // Highlight chips for toppings in the selected pizza
                     highlightChip(chip);
                     chip.setEnabled(true);
                     chip.setCheckable(false); // Non-checkable for predefined toppings
                 } else {
-                    // Reset chips for toppings not in the pizza
                     resetChipStyle(chip);
                 }
             }
 
+        }
+    }
+
+    /**
+     * Helper method to enable or disable a RadioGroup and its RadioButtons.
+     */
+    private void setRadioGroupEnabled(RadioGroup radioGroup, boolean enabled) {
+        for (int i = 0; i < radioGroup.getChildCount(); i++) {
+            View child = radioGroup.getChildAt(i);
+            if (child instanceof RadioButton) {
+                child.setEnabled(enabled);
+            }
         }
     }
 
@@ -331,7 +345,6 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
 
     /**
      * Validates the current pizza selection before proceeding.
-     *
      * @return true if both a pizza type and size have been selected;
      *         false otherwise.
      */
@@ -341,7 +354,6 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
             return false;
         }
 
-        // if size is not selected
         if (getSelectedSize() == null) {
             sharedResource.showAlertDialog(this,"Size Selection", "Please select a pizza size.");
             return false;
@@ -353,16 +365,13 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
      * Adds the selected pizza to the cart and resets the UI.
      */
     private void addToCart() {
-        // if spinner pizza type is not selected
         if (!validatePizzaSelection()) return;
 
-        // Validation pass, add to cart
         Size size = getSelectedSize();
         currentPizza.setSize(size);
         sharedResource.addPizzaToCart(currentPizza, "Chicago Style");
         Toast.makeText(this, currentPizza.getName() + " added to cart.", Toast.LENGTH_SHORT).show();
 
-        // Reset UI states and data
         resetUIState();
     }
 
@@ -372,11 +381,11 @@ public class ChicagoPizzaActivity extends AppCompatActivity {
     private void resetChips() {
         for (int i = 0; i < chipGroupToppings.getChildCount(); i++) {
             Chip chip = (Chip) chipGroupToppings.getChildAt(i);
-            chip.setOnCheckedChangeListener(null); // Remove existing listeners
+            chip.setOnCheckedChangeListener(null);
             resetChipStyle(chip);
             chip.setChecked(false);
             chip.setCloseIconVisible(false);
-            chip.setEnabled(false); // Disable chips after resetting
+            chip.setEnabled(false);
         }
     }
 
