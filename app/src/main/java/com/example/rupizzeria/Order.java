@@ -31,7 +31,7 @@ public class Order {
 
     /**
      * Adds a pizza to the order
-     * @pizza The Pizza to add to the order.
+     * @param pizza The Pizza to add to the order.
      */
     public void addPizza(Pizza pizza) {
         pizzas.add(pizza);
@@ -39,7 +39,7 @@ public class Order {
 
     /**
      * Remove a pizza from the order
-     * @pizza The Pizza to remove from the order.
+     * @param pizza The Pizza to remove from the order.
      */
     public void removePizza(Pizza pizza) {
         pizzas.remove(pizza);

@@ -38,6 +38,11 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.cardview)
+    implementation(fileTree(mapOf(
+        "dir" to "/Users/khan/Library/Android/sdk/platforms/android-34",
+        "include" to listOf("*.aar", "*.jar"),
+        "exclude" to listOf<String>()
+    )))
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
