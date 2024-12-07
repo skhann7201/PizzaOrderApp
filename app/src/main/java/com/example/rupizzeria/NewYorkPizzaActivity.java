@@ -307,7 +307,7 @@ public class NewYorkPizzaActivity extends AppCompatActivity {
                 chip.setCloseIconVisible(true); // Show close icon
             } else {
                 chip.setChecked(false); // Revert check
-                Toast.makeText(this, "Maximum 7 toppings allowed", Toast.LENGTH_SHORT).show();
+                sharedResource.getInstance().showAlertDialog(this, "Topping Limit", "Maximum 7 toppings allowed.");
             }
         } else {
             currentPizza.removeTopping(topping);

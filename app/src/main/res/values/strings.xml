@@ -22,15 +22,20 @@
     <string name="order_id">Order ID: %d</string>
     <string name="order_quantity">Total Items: %d</string>
 
-    <string name="subtotal">Subtotal: $%.2fs</string>
-    <string name="sale_tax">Sales Tax: $%.2fs</string>
-    <string name="total_price">Total: $%.2fs</string>
+    <string name="subtotal">Subtotal: $%.2f</string>
+    <string name="sale_tax">Sales Tax: $%.2f</string>
+    <string name="total_price">Total: $%.2f</string>
     <string name="place_order">Place Order</string>
     <string name="remove_button_description">Remove pizza button</string>
     <string name="pizza_style">%s</string>
     <string name="pizza_crust">Crust: %s</string>
     <string name="pizza_type_size">%s (%s)</string>
     <string name="pizza_toppings">%s</string>
+
+    <string name="order_header">Orders</string>
+    <string name="view_order">View Order Details</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="close_details_window">Close order details window</string>
 
     <string name="nav_home">Home</string>
     <string name="nav_cart">Cart</string>

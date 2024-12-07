@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".CartActivity">
 
-    <!-- Header Section -->
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
@@ -17,7 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Back Button and Title -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +45,6 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- Order Info -->
         <TextView
             android:id="@+id/tv_order_id"
             android:layout_width="match_parent"
@@ -74,7 +71,6 @@
             android:background="@color/primary_orange" />
     </LinearLayout>
 
-    <!-- Item List Section -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_cart_items"
         android:layout_width="match_parent"
@@ -84,7 +80,6 @@
         app:layout_constraintBottom_toTopOf="@id/summary_and_place_order"
         tools:listitem="@layout/cardview_cart_item" />
 
-    <!-- Summary and Place Order Section -->
     <LinearLayout
         android:id="@+id/summary_and_place_order"
         android:layout_width="match_parent"
@@ -97,7 +92,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- Summary Section -->
         <TextView
             android:id="@+id/tv_subtotal"
             android:layout_width="match_parent"
@@ -132,7 +126,6 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
-        <!-- Place Order Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_placeOrder"
             android:layout_width="wrap_content"

@@ -11,10 +11,11 @@ import android.widget.TextView;
 import java.util.List;
 
 /**
- * Adapter class for displaying orders in a ListView.
+ * Adapter class for displaying each order item in a ListView.
+ * This adapter uses a card layout (cardview_order_item) for displaying each order.
+ * @author Vy Nguyen, Shahnaz Khan
  */
 public class OrderListAdapter extends BaseAdapter {
-
     private final List<Order> ordersList;
     private final Context context;
     private final OnOrderClickListener onOrderClickListener;
@@ -32,21 +33,47 @@ public class OrderListAdapter extends BaseAdapter {
         this.onOrderClickListener = onOrderClickListener;
     }
 
+    /**
+     * Gets the number of orders in the list.
+     *
+     * @return The number of orders.
+     */
     @Override
     public int getCount() {
         return ordersList.size();
     }
 
+    /**
+     * Gets the order at a specific position.
+     *
+     * @param position The position of the order in the list.
+     * @return The order at the specified position.
+     */
     @Override
     public Object getItem(int position) {
         return ordersList.get(position);
     }
 
+    /**
+     * Gets the ID of the item at the specified position.
+     * In this case, it returns the position itself as the ID.
+     *
+     * @param position The position of the item in the list.
+     * @return The position of the item as its ID.
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * Creates and populates the view for an order in the ListView.
+     *
+     * @param position    The position of the order in the list.
+     * @param convertView The recycled view to populate (if available).
+     * @param parent      The parent ViewGroup that this view will be attached to.
+     * @return The populated view for the order at the specified position.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
@@ -61,10 +88,10 @@ public class OrderListAdapter extends BaseAdapter {
         TextView tvOrderTotal = convertView.findViewById(R.id.tv_order_total);
         Button btnViewOrder = convertView.findViewById(R.id.btn_view_order);
 
-        tvOrderId.setText("Order ID: #" + order.getOrderNumber());
-        tvOrderItems.setText("Items: " + order.getOrderQuantity());
-        tvOrderTotal.setText(String.format("Total: $%.2f", order.getTotalPrice()));
-
+        // Use string resources to set text
+        tvOrderId.setText(context.getString(R.string.order_id, order.getOrderNumber()));
+        tvOrderItems.setText(context.getString(R.string.order_quantity, order.getOrderQuantity()));
+        tvOrderTotal.setText(context.getString(R.string.total_price, order.getTotalPrice()));
         btnViewOrder.setOnClickListener(v -> onOrderClickListener.onViewOrder(order));
 
         return convertView;

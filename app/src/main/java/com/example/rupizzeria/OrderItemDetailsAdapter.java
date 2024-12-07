@@ -1,6 +1,6 @@
 package com.example.rupizzeria;
 
-import android.text.TextUtils;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,117 +10,81 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Adapter for displaying pizza details in an order.
  */
-public class OrderItemDetailsAdapter extends RecyclerView.Adapter<OrderItemDetailsAdapter.PizzaViewHolder> {
-    private final List<Pizza> pizzas;
+public class OrderItemDetailsAdapter extends RecyclerView.Adapter<OrderItemDetailsAdapter.PizzaItemsViewHolder> {
+    private final List<Pizza> pizzaList;
     private final ShareResource shareResource = ShareResource.getInstance();
 
     public OrderItemDetailsAdapter(List<Pizza> pizzas) {
-        this.pizzas = pizzas;
+        this.pizzaList = pizzas;
     }
 
     @NonNull
     @Override
-    public PizzaViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PizzaItemsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.order_item_details, parent, false);
-        return new PizzaViewHolder(view);
+        return new PizzaItemsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PizzaViewHolder holder, int position) {
-        Pizza pizza = pizzas.get(position);
+    public void onBindViewHolder(@NonNull PizzaItemsViewHolder holder, int position) {
+        Pizza pizza = pizzaList.get(position);
+        String type = pizza.formatEnumName(pizza.getName());
+        String crust = pizza.formatEnumName(pizza.getCrust().name());
+        String size = pizza.formatEnumName(pizza.getSize().name());
 
-        // Set pizza image resource based on style and type
-        holder.imgPizza.setImageResource(getPizzaImageResource(pizza));
-
-        // Get the formatted pizza style
-        String pizzaStyle = shareResource.getPizzaStyle(pizza);
-
-        // Format the toppings
-        List<String> formattedToppings = new ArrayList<>();
+        // Format toppings as a comma-separated string using StringBuilder
+        StringBuilder toppingsBuilder = new StringBuilder();
         for (Topping topping : pizza.getToppings()) {
-            formattedToppings.add(shareResource.formatToppingName(topping)); // Use the instance method
+            if (toppingsBuilder.length() > 0) {
+                toppingsBuilder.append(", ");
+            }
+            toppingsBuilder.append(ShareResource.getInstance().formatToppingName(topping));
         }
-        String toppingsList = "Toppings: " + (formattedToppings.isEmpty() ? "No Toppings" : TextUtils.join(", ", formattedToppings));
+        String toppings = toppingsBuilder.length() > 0 ? toppingsBuilder.toString() : "No Toppings";
 
-        // Set values to the views
-        holder.tvPizzaStyle.setText(pizzaStyle);
-        holder.tvPizzaType.setText("Type: " + pizza.getName());
-        holder.tvPizzaSize.setText("Size: " + pizza.getSize().name());
-        holder.tvPizzaToppings.setText(toppingsList);
-        holder.tvPizzaPrice.setText(String.format("Price: $%.2f", pizza.price()));
+
+        // Access context from the itemView of the holder
+        Context context = holder.itemView.getContext();
+
+        // Set the pizza image
+        int imageResource = shareResource.getInstance().getPizzaImageResource(pizza);
+        holder.imgPizza.setImageResource(imageResource);
+
+        holder.tvPizzaStyle.setText(context.getString(R.string.pizza_style, ShareResource.getInstance().getPizzaStyle(pizza)));
+        holder.tvPizzaTypeAndSize.setText(context.getString(R.string.pizza_type_size, type, size));
+        holder.tvPizzaCrust.setText(context.getString(R.string.pizza_crust, crust));
+        holder.tvPizzaToppings.setText(context.getString(R.string.pizza_toppings, toppings));
+        holder.tvPizzaPrice.setText(context.getString(R.string.pizza_price, pizza.price()));
     }
 
     @Override
     public int getItemCount() {
-        return pizzas.size();
-    }
-
-    /**
-     * Maps the pizza style and type to the corresponding image resource.
-     *
-     * @param pizza The pizza object.
-     * @return The drawable resource ID for the pizza image.
-     */
-    private int getPizzaImageResource(Pizza pizza) {
-        String pizzaStyle = shareResource.getPizzaStyle(pizza);
-        String pizzaType = pizza.getName();
-
-        // Map Chicago Style pizza types to images
-        if (pizzaStyle.equals("Chicago Style")) {
-            switch (pizzaType) {
-                case "Deluxe":
-                    return R.drawable.chicago_deluxe;
-                case "Meatzza":
-                    return R.drawable.chicago_meatzza;
-                case "BBQ Chicken":
-                    return R.drawable.chicago_bbqchicken;
-                case "Build Your Own":
-                    return R.drawable.chicago_byo;
-                default:
-                    return R.drawable.chicago_default;
-            }
-        }
-
-        // Map New York Style pizza types to images
-        if (pizzaStyle.equals("New York Style")) {
-            switch (pizzaType) {
-                case "Deluxe":
-                    return R.drawable.ny_deluxe;
-                case "Meatzza":
-                    return R.drawable.ny_meatzza;
-                case "BBQ Chicken":
-                    return R.drawable.ny_bbqchicken;
-                case "Build Your Own":
-                    return R.drawable.ny_byo;
-                default:
-                    return R.drawable.ny_default;
-            }
-        }
-
-        // Fallback to a default image
-        return R.drawable.pizzeria_logo;
+        return pizzaList.size();
     }
 
     /**
      * ViewHolder for Pizza items in the RecyclerView.
      */
-    static class PizzaViewHolder extends RecyclerView.ViewHolder {
-        TextView tvPizzaStyle, tvPizzaType, tvPizzaSize, tvPizzaToppings, tvPizzaPrice;
-        ImageView imgPizza;
+    static class PizzaItemsViewHolder extends RecyclerView.ViewHolder {
+        private final TextView tvPizzaStyle, tvPizzaCrust, tvPizzaTypeAndSize, tvPizzaToppings, tvPizzaPrice;
+        private final ImageView imgPizza;
 
-        public PizzaViewHolder(@NonNull View itemView) {
+        /**
+         * Constructor to initialize the views in the ViewHolder.
+         * @param itemView The root view for the item in the RecyclerView
+         */
+        public PizzaItemsViewHolder(@NonNull View itemView) {
             super(itemView);
             imgPizza = itemView.findViewById(R.id.img_pizza);
             tvPizzaStyle = itemView.findViewById(R.id.tv_pizza_style);
-            tvPizzaType = itemView.findViewById(R.id.tv_pizza_type);
-            tvPizzaSize = itemView.findViewById(R.id.tv_pizza_size);
+            tvPizzaCrust = itemView.findViewById(R.id.tv_pizza_crust);
+            tvPizzaTypeAndSize = itemView.findViewById(R.id.tv_pizza_type_size);
             tvPizzaToppings = itemView.findViewById(R.id.tv_pizza_toppings);
             tvPizzaPrice = itemView.findViewById(R.id.tv_pizza_price);
         }

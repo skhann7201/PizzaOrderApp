@@ -75,7 +75,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         Context context = holder.itemView.getContext();
 
         // Using string resources for formatting
-        holder.tvPizzaName.setText(context.getString(R.string.pizza_style, ShareResource.getInstance().getPizzaStyle(pizza)));
+        holder.tvPizzaStyle.setText(context.getString(R.string.pizza_style, ShareResource.getInstance().getPizzaStyle(pizza)));
         holder.tvPizzaTypeAndSize.setText(context.getString(R.string.pizza_type_size, type, size));
         holder.tvPizzaCrust.setText(context.getString(R.string.pizza_crust,crust));
         holder.tvPizzaToppings.setText(context.getString(R.string.pizza_toppings, toppings));
@@ -83,7 +83,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         // Set the pizza image
         int imageResource = ShareResource.getInstance().getPizzaImageResource(pizza);
-        holder.pizzaImage.setImageResource(imageResource);
+        holder.imgPizza.setImageResource(imageResource);
 
         holder.btnRemovePizza.setOnClickListener(v -> {
             if (onPizzaRemoveListener != null) {
@@ -107,8 +107,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
      */
     public static class CartViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView tvPizzaName, tvPizzaCrust, tvPizzaTypeAndSize, tvPizzaToppings, tvPizzaPrice;
-        private final ImageView pizzaImage;
+        private final TextView tvPizzaStyle, tvPizzaCrust, tvPizzaTypeAndSize, tvPizzaToppings, tvPizzaPrice;
+        private final ImageView imgPizza;
         private final ImageButton btnRemovePizza; // Button to remove pizza from the cart
         private final CardView cardView;
 
@@ -120,8 +120,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             super(itemView);
 
             // Initialize views by finding them in the itemView
-            pizzaImage = itemView.findViewById(R.id.img_pizza);
-            tvPizzaName = itemView.findViewById(R.id.tv_pizza_style);
+            imgPizza = itemView.findViewById(R.id.img_pizza);
+            tvPizzaStyle = itemView.findViewById(R.id.tv_pizza_style);
             tvPizzaCrust = itemView.findViewById(R.id.pizza_crust);
             tvPizzaTypeAndSize = itemView.findViewById(R.id.pizza_type_size);
             tvPizzaToppings = itemView.findViewById(R.id.tv_pizza_toppings);

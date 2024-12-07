@@ -13,13 +13,12 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Order Information -->
         <TextView
             android:id="@+id/tv_order_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semibold"
-            android:text="Order ID: 32UD457"
+            android:text="@string/order_id"
             android:textColor="@android:color/black"
             android:textSize="16sp" />
 
@@ -28,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
-            android:text="Items: 3"
+            android:text="@string/order_quantity"
             android:textColor="@android:color/darker_gray"
             android:textSize="14sp" />
 
@@ -37,11 +36,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
-            android:text="Total: $29.99"
+            android:text="@string/total_price"
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
-        <!-- View Order Button -->
         <Button
             android:id="@+id/btn_view_order"
             android:layout_width="wrap_content"
@@ -49,7 +47,7 @@
             android:layout_gravity="end"
             android:backgroundTint="@color/primary_red"
             android:fontFamily="@font/poppins"
-            android:text="View Order"
+            android:text="@string/view_order"
             android:textColor="@android:color/white" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

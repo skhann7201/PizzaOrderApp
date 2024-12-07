@@ -162,9 +162,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <!-- Small Back Button -->
-
         <ImageButton
             android:id="@+id/btn_back"
             android:layout_width="48dp"
@@ -175,7 +172,6 @@
             android:scaleType="center"
             android:src="@drawable/arrow_back" />
 
-        <!-- Title TextView -->
         <TextView
             android:id="@+id/tv_headerTitle"
             android:layout_width="wrap_content"
